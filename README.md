@@ -1,4 +1,18 @@
 # Projet Compilation 2026
 
-Branche "parser" du projet.
-Branche de Rendu offrant un exécutable chargé de l'analyse lexicale et syntaxique du code JS entré et accepte un code correct dans le fragment implémenté.
+Branche "parser_work" du projet.
+Branche de travail offrant un exécutable chargé de l'analysé lexicale et syntaxique du code JS en entrée et accepte un code correct dans le fragment implémenté
+
+## Utilisation
+
+- Construction
+
+```bash
+dune build
+```
+
+- Execution
+
+```bash
+dune exec ocaml_parser
+```
