@@ -8,11 +8,11 @@ Branche de travail offrant un exécutable chargé de l'analysé lexicale et synt
 - Construction
 
 ```bash
-dune build
+make
 ```
 
 - Execution
 
 ```bash
-dune exec ocaml_parser
+./main.out
 ```
