@@ -23,6 +23,8 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
+	| ';'
+		{ EOCOMMAND }
 	| eof
 		{ raise Eof }		(*Lance une exception quand fin de fichier*)
 	| _
