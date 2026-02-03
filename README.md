@@ -14,5 +14,5 @@ make
 - Execution
 
 ```bash
-./main.out
+./main
 ```
