@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 %token <int> NUMBER
 %token PLUS MINUS TIMES GPAREN DPAREN EOL EOCOMMAND
+=======
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN EOL EOCOMMAND
+>>>>>>> p1.1
 
 %left PLUS MINUS 	
-%left TIMES 		
+%left TIMES DIV		
 %nonassoc UMINUS 	
 			
 %type <int> main expression 
@@ -18,6 +22,7 @@ expression:
 	expression PLUS expression 	{ $1+$3 }
 	| expression MINUS expression 	{ $1-$3 }
 	| expression TIMES expression 	{ $1*$3 }
+	| expression DIV expression 	{ $1/$3 }
 	| GPAREN expression DPAREN	{ $2 	}
 	| MINUS expression %prec UMINUS { -$2	}
 	| NUMBER 			{ $1 	}
