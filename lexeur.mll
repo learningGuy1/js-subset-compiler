@@ -11,7 +11,7 @@ rule token = parse
 					on ne crée pas de token*)
 	| ['\n']
 		{ EOL }			(*Retourne Token EOL quand changement de ligne*)
-	| ['0'-'9']+
+	| ['0'-'9']+'.'['0'-'9']*
 		{ NUMBER }		(*Retourne Token NUMBER pour les entiers*)
 	| '+'
 		{ PLUS }		(*...*)
