@@ -11,8 +11,8 @@ rule token = parse
 					on ne crée pas de token*)
 	| ['\n']
 		{ EOL }			(*Retourne Token EOL quand changement de ligne*)
-	| ['0'-'9']+'.'['0'-'9']* as lexem { NUMBER(int_of_string lexem) }	
-					(*Transmet la valeur de l'entier lu*)
+	| ['0'-'9']+'.'['0'-'9']* as lexem { NUMBER(float_of_string lexem) }	
+					(*Transmet la valeur du flottant lu*)
 	| '+'
 		{ PLUS }		(*...*)
 	| '-'
