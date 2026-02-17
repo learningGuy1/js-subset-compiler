@@ -1,7 +1,7 @@
-%token NUMBER PLUS MINUS TIMES GPAREN DPAREN EOL EOCOMMAND
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN EOL EOCOMMAND
 
 %left PLUS MINUS 	
-%left TIMES 		
+%left TIMES DIV		
 %nonassoc UMINUS 	
 			
 %type <unit> main commande expression 
@@ -19,6 +19,8 @@ expression:
 	| expression MINUS expression
 	{}
 	| expression TIMES expression
+	{}
+	| expression DIV expression
 	{}
 	| GPAREN expression DPAREN
 	{}
