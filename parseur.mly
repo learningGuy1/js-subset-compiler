@@ -1,29 +1,24 @@
-%token NUMBER PLUS MINUS TIMES GPAREN DPAREN EOL EOCOMMAND
+%token <int> NUMBER
+%token PLUS MINUS TIMES GPAREN DPAREN EOL EOCOMMAND
 
 %left PLUS MINUS 	
 %left TIMES 		
 %nonassoc UMINUS 	
 			
-%type <unit> main commande expression 
+%type <int> main expression 
 %start main 
 %%
 main:
-	commande EOL {} 
+	commande EOL { $1 } 
 	;
 commande:
-	expression EOCOMMAND {}
+	expression EOCOMMAND { $1 }
 	;
 expression:
-	expression PLUS expression
-	{}
-	| expression MINUS expression
-	{}
-	| expression TIMES expression
-	{}
-	| GPAREN expression DPAREN
-	{}
-	| MINUS expression %prec UMINUS
-	{}
-	| NUMBER
-	{}
+	expression PLUS expression 	{ $1+$3 }
+	| expression MINUS expression 	{ $1-$3 }
+	| expression TIMES expression 	{ $1*$3 }
+	| GPAREN expression DPAREN	{ $2 	}
+	| MINUS expression %prec UMINUS { -$2	}
+	| NUMBER 			{ $1 	}
 	;
