@@ -19,6 +19,8 @@ rule token = parse
 		{ MINUS }
 	| '*'
 		{ TIMES }
+	| '/'
+		{ DIV }
 	| '('
 		{ GPAREN }
 	| ')'
