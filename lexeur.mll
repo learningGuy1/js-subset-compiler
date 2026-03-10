@@ -11,14 +11,16 @@ rule token = parse
 					on ne crée pas de token*)
 	| ['\n']
 		{ EOL }			(*Retourne Token EOL quand changement de ligne*)
-	| ['0'-'9']+ as lexem
-		{ NUMBER(int_of_string lexem) }		
+	| ['0'-'9']+'.'['0'-'9']* as lexem
+		{ NUMBER(float_of_string lexem) }		(*Retourne Token NUMBER pour les entiers*)
 	| '+'
 		{ PLUS }		(*...*)
 	| '-'
 		{ MINUS }
 	| '*'
 		{ TIMES }
+	| '/'
+		{ DIV }
 	| '('
 		{ GPAREN }
 	| ')'
