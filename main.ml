@@ -3,8 +3,8 @@ let _ =
 		let lexbuf = Lexing.from_channel stdin in 	(*lexeur lancé sur stdin*)
 		while true do					(*on ne s'arrête pas*)
 			Parseur.main Lexeur.token lexbuf	(*parseur une ligne*)
-			|> AST.code 
-			|> Printf.printf "%s\n"
+			|> AST.code
+			|> Printf.printf "%s\n%!";
 		done
 	with
 	| Lexeur.Eof -> exit 0

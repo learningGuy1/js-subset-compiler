@@ -7,11 +7,13 @@ and expression_a =
 	| Neg of expression_a
 	| Num of int
 
+(*
 type ast =
 	| NULL
 	| Noeud of type_noeud * int * ast * ast
 and type_noeud = PLUS | MOINS | MULT | NEG | NUM
 ;;
+*)
 
 (* Fonctions d'affichage *)
 
@@ -29,6 +31,17 @@ and print_binaire form s g d =
 	Format.fprintf form "@[<2>%s%s@ %a%s@ %a%s@]" s "(" print_expr g " ," print_expr d " )"
 ;;
 
+let rec code com = match com with
+	Expr e -> com_expr e
+
+and com_expr expr = match expr with
+	Plus (g,d) -> com_expr g ^ com_expr d ^ "AddiNb\n"
+	| Moins (g,d) -> com_expr g ^ com_expr d ^ "SubiNb\n"
+	| Mult (g,d) -> com_expr g ^ com_expr d ^ "MultNb\n"
+	| Neg e -> com_expr e ^ "NegaNb\n"
+	| Num n -> "CstNb " ^ (string_of_int n) ^ "\n"
+;;
+(*
 let rec com_to_ast_expr expr = match expr with
 	| Plus (g,d) -> Noeud(PLUS, 0, com_to_ast_expr g, com_to_ast_expr d)
 	| Moins (g,d) -> Noeud(MOINS, 0, com_to_ast_expr g, com_to_ast_expr d)	
@@ -46,13 +59,14 @@ let code_string s n = match s with
 	| MOINS -> "SubiNb\n"
 	| MULT -> "MultNb\n"
 	| NEG -> "NegaNb\n"
-	| NUM -> "CstNb\n"^(string_of_int n)
+	| NUM -> "CstNb\n" ^ (string_of_int n)
 ;;
 
 let rec code_ast ast = match ast with
 	| NULL -> "";
-	| Noeud(s,n,g,d) ->	code_ast g^(code_ast d)^(code_string s n)	
+	| Noeud(s,n,g,d) -> code_ast g ^ (code_ast d) ^ (code_string s n)	
 ;;
 
 let code com = let ast = com_to_ast com in code_ast ast
 ;;
+*)
