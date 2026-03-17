@@ -11,6 +11,9 @@ rule token = parse
 					on ne crée pas de token*)
 	| ['\n']
 		{ EOL }			(*Retourne Token EOL quand changement de ligne*)
+	
+	
+	(*FLOTTANTS*)
 	| ['0'-'9']+'.'['0'-'9']*
 		{ NUMBER }		(*Retourne Token NUMBER pour les entiers*)
 	| '+'
@@ -25,6 +28,24 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
+		
+	(*BOOLEENS*)
+	| 'True'+'False' 
+		{ BOOLEAN }
+	| '=='
+		{ EQ }
+	| '>='
+		{ GREQ }
+	| '>'
+		{ GR }
+	| '<='
+		{ LOEQ }
+	| '<'
+		{ LO }
+	| '!'
+		{ NOT }
+		
+		
 	| ';'
 		{ EOCOMMAND }
 	| eof

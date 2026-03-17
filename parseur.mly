@@ -1,5 +1,7 @@
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN EOL EOCOMMAND
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOL EOCOMMAND
 
+%left EQ
+%left GREQ LOEQ GR LO
 %left PLUS MINUS 	
 %left TIMES DIV		
 %nonassoc UMINUS 	
@@ -27,5 +29,19 @@ expression:
 	| MINUS expression %prec UMINUS
 	{}
 	| NUMBER
+	{}
+	| expression EQ expression
+	{}
+	| expression GREQ expression
+	{}
+	| expression GR expression
+	{}
+	| expression LOEQ expression
+	{}
+	| expression LO expression
+	{}
+	| NOT expression
+	{}
+	| BOOLEAN
 	{}
 	;
