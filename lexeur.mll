@@ -30,15 +30,15 @@ rule token = parse
 		{ DPAREN }
 		
 	(*BOOLEENS*)
-	| 'True'+'False' 
+	| "true"|"false" 
 		{ BOOLEAN }
-	| '=='
+	| "=="
 		{ EQ }
-	| '>='
+	| ">="
 		{ GREQ }
 	| '>'
 		{ GR }
-	| '<='
+	| "<="
 		{ LOEQ }
 	| '<'
 		{ LO }

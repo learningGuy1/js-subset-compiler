@@ -4,7 +4,7 @@
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
 %left TIMES DIV		
-%nonassoc UMINUS 	
+%nonassoc NOT UMINUS 	
 			
 %type <unit> main commande expression 
 %start main 
