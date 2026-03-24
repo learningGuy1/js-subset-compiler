@@ -13,6 +13,12 @@ rule token = parse
 	(*FLOTTANTS*)
 	| ['0'-'9']+'.'['0'-'9']*
 		{ NUMBER }		(*Retourne Token NUMBER pour les entiers*)
+	(*FLOTTANTS SCIENTIFIQUES*)
+	| (['0'-'9']*|['0'-'9']*'.'['0'-'9']+)'e''-'?['0'-'9']+
+		{ NUMBER }
+	(*NaN*)
+	| "NaN"
+		{ NUMBER }
 	| '+'
 		{ PLUS }		(*...*)
 	| '-'
