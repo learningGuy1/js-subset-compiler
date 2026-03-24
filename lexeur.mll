@@ -6,11 +6,11 @@
 
 (*On utilise des expressions régulières pour reconnaître des patterns*)
 rule token = parse
-	[' ' '\t' '\r']
+	[' ' '\t' '\r' '\n']
 		{ token lexbuf } 	(*quand on lit un espace, une tabulation,... 
 					on ne crée pas de token*)
-	| ['\n']
-		{ EOL }			(*Retourne Token EOL quand changement de ligne*)
+	
+	(*FLOTTANTS*)
 	| ['0'-'9']+'.'['0'-'9']*
 		{ NUMBER }		(*Retourne Token NUMBER pour les entiers*)
 	| '+'
@@ -25,6 +25,24 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
+		
+	(*BOOLEENS*)
+	| "true"|"false" 
+		{ BOOLEAN }
+	| "=="
+		{ EQ }
+	| ">="
+		{ GREQ }
+	| '>'
+		{ GR }
+	| "<="
+		{ LOEQ }
+	| '<'
+		{ LO }
+	| '!'
+		{ NOT }
+		
+		
 	| ';'
 		{ EOCOMMAND }
 	| eof
