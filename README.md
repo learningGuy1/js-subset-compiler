@@ -24,7 +24,3 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 - La commande make clean efface maintenant bien tous les fichiers hors main créés à la construction
 - Passage à la manipulation de fichiers en entrée/sortie
 - Ajout des Booléens
-
-## A faire avant prochaine version
-
-- Ajout d'affichage pour tester le parseur sur les booléens en gardant la trace d'exécution
