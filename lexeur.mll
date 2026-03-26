@@ -1,6 +1,5 @@
 {
 	open Parseur (*généré à partir de parseur.mly et définit les tokens*)
-	exception Eof
 	exception TokenInconnu
 }
 
@@ -8,11 +7,17 @@
 rule token = parse
 	[' ' '\t' '\r' '\n']
 		{ token lexbuf } 	(*quand on lit un espace, une tabulation,... 
-					on ne crée pas de token*)
-	
+					on ne crée pas de token*)	
+
 	(*FLOTTANTS*)
-	| ['0'-'9']+'.'['0'-'9']*
-		{ NUMBER }		(*Retourne Token NUMBER pour les entiers*)
+	| (['0'-'9']*'.'?['0'-'9']+)|(['0'-'9']+'.'?['0'-'9']*)
+		{ NUMBER }		(*Retourne Token NUMBER pour les flottants*)
+	(*FLOTTANTS SCIENTIFIQUES*)
+	| ( (['0'-'9']*'.'?['0'-'9']+)|(['0'-'9']+'.'?['0'-'9']*) )'e''-'?['0'-'9']+
+		{ NUMBER }
+	(*NaN*)
+	| "NaN"
+		{ NUMBER }
 	| '+'
 		{ PLUS }		(*...*)
 	| '-'
@@ -46,6 +51,6 @@ rule token = parse
 	| ';'
 		{ EOCOMMAND }
 	| eof
-		{ raise Eof }		(*Lance une exception quand fin de fichier*)
+		{ EOF }
 	| _
 		{ raise TokenInconnu }	(*Lance une exception quand symbole inconnu*)
