@@ -1,31 +1,34 @@
-%{
-  open AST
-%}
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND EOF
 
-%token <float> NUMBER
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN EOL EOCOMMAND
-
+%left EQ
+%left GREQ LOEQ GR LO
 %left PLUS MINUS 	
 %left TIMES DIV		
-%nonassoc UMINUS 	
-			
-%type <AST.commande_a> main commande
-%type <AST.expression_a> expression
+%nonassoc NOT UMINUS 	
 
+%type <unit> main commande expression	
 %start main 
 %%
 main:
-	commande EOL 			{ $1 } 
+	commande {}
+	| commande main  {} 
 	;
 commande:
-	expression EOCOMMAND 		{ Expr($1) }
+	expression EOCOMMAND 		{}
 	;
 expression:
-	expression PLUS expression 	{ Plus($1,$3) }
-	| expression MINUS expression 	{ Moins($1,$3) }
-	| expression TIMES expression 	{ Mult($1,$3) }
-	| expression DIV expression 	{ Div($1,$3) }
-	| GPAREN expression DPAREN 	{ $2 }
-	| MINUS expression %prec UMINUS	{ Neg $2 }
-	| NUMBER 			{ Num($1) }
+	expression PLUS expression {}
+	| expression MINUS expression {}
+	| expression TIMES expression {}
+	| expression DIV expression {}
+	| GPAREN expression DPAREN {}
+	| MINUS expression %prec UMINUS {}
+	| NUMBER {}
+	| expression EQ expression {}
+	| expression GREQ expression {}
+	| expression GR expression {}
+	| expression LOEQ expression {}
+	| expression LO expression {}
+	| NOT expression {}
+	| BOOLEAN {}
 	;

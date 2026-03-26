@@ -1,18 +1,23 @@
 {
 	open Parseur (*généré à partir de parseur.mly et définit les tokens*)
-	exception Eof
 	exception TokenInconnu
 }
 
 (*On utilise des expressions régulières pour reconnaître des patterns*)
 rule token = parse
-	[' ' '\t' '\r']
+	[' ' '\t' '\r' '\n']
 		{ token lexbuf } 	(*quand on lit un espace, une tabulation,... 
-					on ne crée pas de token*)
-	| ['\n']
-		{ EOL }			(*Retourne Token EOL quand changement de ligne*)
-	| ['0'-'9']+'.'['0'-'9']* as lexem
-		{ NUMBER(float_of_string lexem) }		(*Retourne Token NUMBER pour les entiers*)
+					on ne crée pas de token*)	
+
+	(*FLOTTANTS*)
+	| (['0'-'9']*'.'?['0'-'9']+)|(['0'-'9']+'.'?['0'-'9']*)
+		{ NUMBER }		(*Retourne Token NUMBER pour les flottants*)
+	(*FLOTTANTS SCIENTIFIQUES*)
+	| ( (['0'-'9']*'.'?['0'-'9']+)|(['0'-'9']+'.'?['0'-'9']*) )'e''-'?['0'-'9']+
+		{ NUMBER }
+	(*NaN*)
+	| "NaN"
+		{ NUMBER }
 	| '+'
 		{ PLUS }		(*...*)
 	| '-'
@@ -25,9 +30,27 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
+		
+	(*BOOLEENS*)
+	| "true"|"false" 
+		{ BOOLEAN }
+	| "=="
+		{ EQ }
+	| ">="
+		{ GREQ }
+	| '>'
+		{ GR }
+	| "<="
+		{ LOEQ }
+	| '<'
+		{ LO }
+	| '!'
+		{ NOT }
+		
+		
 	| ';'
 		{ EOCOMMAND }
 	| eof
-		{ raise Eof }		(*Lance une exception quand fin de fichier*)
+		{ EOF }
 	| _
 		{ raise TokenInconnu }	(*Lance une exception quand symbole inconnu*)
