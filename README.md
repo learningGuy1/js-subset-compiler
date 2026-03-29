@@ -1,7 +1,9 @@
 # Projet Compilation 2026
 
 
+
 Branche "edwin_perso" du projet.
+
 
 ## Utilisation
 
@@ -26,4 +28,5 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 - Fix de la grammaire
 - Le main peut maintenant lire plusieurs commandes successives
 - La generation d'AST fonctionne maintenant aussi sur les booléens et opérateurs associés
+- la generation du code assembleur fonctionne pour les instructions assembleur Equals, GrEqNB etc...
 
