@@ -1,13 +1,11 @@
 let _ =
 	try
-		let lexbuf = Lexing.from_channel stdin in 	(*lexeur lancé sur stdin*)
-		while true do					(*on ne s'arrête pas*)
-			Parseur.main Lexeur.token lexbuf	(*parseur une ligne*)
-			|> AST.code
-			|> Printf.printf "%s\n%!";
-		done
+		let lexbuf = Lexing.from_channel (open_in Sys.argv.(1)) in
+		Parseur.main Lexeur.token lexbuf
+		|> AST.code
+		|> Printf.fprintf (open_out Sys.argv.(2)) "%s\n%!"
 	with
 	| Lexeur.Eof -> exit 0
 	| Lexeur.TokenInconnu					(*erreur de lexing*)
 	| Parsing.Parse_error ->				(*erreur de parsing*)
-		Printf.printf("Ceci n'est pas une expression arithmétique\n")
+		Printf.printf "Ceci n'est pas une expression arithmétique\n"
