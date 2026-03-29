@@ -1,12 +1,7 @@
 # Projet Compilation 2026
 
-<<<<<<< HEAD
-Branche "main" du projet.
-=======
-Branche "ast" du projet. Branche de travail portant sur la manipulation des Arbres Syntaxiques Abstraits (Abstract Syntax Tree)
-=======
-Branche "parser_work" du projet.  
-Branche de travail offrant un exécutable chargé de l'analyse lexicale et syntaxique du code JS en entrée et accepte un code correct dans le fragment implémenté
+
+Branche "edwin_perso" du projet.
 
 ## Utilisation
 
@@ -32,4 +27,3 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 - Le main peut maintenant lire plusieurs commandes successives
 - La generation d'AST fonctionne maintenant aussi sur les booléens et opérateurs associés
 
->>>>>>> ast
