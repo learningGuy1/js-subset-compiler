@@ -1,6 +1,4 @@
 # Projet Compilation 2026
-
-
 Branche "main" du projet.
 Branche de travail offrant un exécutable chargé de générer le code assembleur pour éxécuter le programme JS
 
