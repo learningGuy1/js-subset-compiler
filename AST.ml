@@ -48,7 +48,7 @@ let rec code prog = match prog with
 	| Prog(l) -> code_list l
 	
 and code_list l = match l with
-	| [] -> ""
+	| [] -> "Halt"
 	| com::q -> code_com com ^ code_list q
 
 and code_com com = match com with
