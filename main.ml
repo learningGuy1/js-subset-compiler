@@ -5,7 +5,6 @@ let _ =
 		|> AST.code
 		|> Printf.fprintf (open_out Sys.argv.(2)) "%s\n%!"
 	with
-	| Lexeur.Eof -> exit 0
 	| Lexeur.TokenInconnu					(*erreur de lexing*)
 	| Parsing.Parse_error ->				(*erreur de parsing*)
 		Printf.printf "Ceci n'est pas une expression arithmétique\n"
