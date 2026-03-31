@@ -1,5 +1,6 @@
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND EOF
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF
 
+%left ASSIGN
 %left EQ
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
@@ -31,4 +32,6 @@ expression:
 	| expression LO expression {}
 	| NOT expression {}
 	| BOOLEAN {}
+	| expression ASSIGN expression {}
+	| VAR {}
 	;

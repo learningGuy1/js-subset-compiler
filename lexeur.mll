@@ -46,7 +46,12 @@ rule token = parse
 		{ LO }
 	| '!'
 		{ NOT }
-		
+	
+	(*VARIABLES*)
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*
+		{ VAR }
+	| '='
+		{ ASSIGN }
 		
 	| ';'
 		{ EOCOMMAND }
