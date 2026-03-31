@@ -11,7 +11,7 @@
 %start main 
 %%
 main:
-	commande {}
+	commande EOF {}
 	| commande main  {} 
 	;
 commande:
