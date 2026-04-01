@@ -42,8 +42,10 @@ and print_expr form expr = match expr with
 	| Lo (g,d) -> print_binaire form "<" g d
 	| Not f -> Format.fprintf form "%s %a" "!" print_expr f
 	| Bool b -> Format.fprintf form "Bool[%b]" b
-	| Assign (g,d) -> print_binaire form "=" g d
+	| Assign (g,d) -> print_binaire_lstring form "=" g d
 	| Var x -> Format.fprintf form "Var[%s]" x 
 and print_binaire form s g d =
-	Format.fprintf form "%s%s %a%s %a%s" s "(" print_expr g " ," print_expr d " )"
+	Format.fprintf form "%s%s %a%s %a%s" s "(" print_expr g "," print_expr d " )"
+and print_binaire_lstring form s1 s2 d =
+	Format.fprintf form "%s %a%s" s1^"("^s2" ," print_expr d " )"
 ;;
