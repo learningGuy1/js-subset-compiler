@@ -26,3 +26,4 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 - Ajout des commentaires simples et multi-lignes
 - Modification du main pour imprimer les messages d'erreur dans le terminal et distinguer les erreurs de lexing et de parsing
 - Ajout de fichiers tests *test_ast*, *test_commentaires*, *test_flottants_scientifiques* et *test_var* pour tester les différentes parties du projet
+- Le fichier AST.ml n'est plus suivi dans cette branche (il s'agissait d'un ajout superflu sur un commit précédent)
