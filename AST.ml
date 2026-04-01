@@ -16,7 +16,7 @@ and expression_a =
 	| Lo of expression_a * expression_a
 	| Not of expression_a
 	| Bool of bool
-	| Assign of expression_a * expression_a
+	| Assign of string * expression_a
 	| Var of string
 ;;
 
