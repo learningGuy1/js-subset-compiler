@@ -1,14 +1,19 @@
-123;
+//Flottants seuls
+123 + 0.456 ;
 .456;
 789.;
 0.9;
 
+//Notation scientifique
 12e34;
 56.e78;
 .03e138;
 1e-6;
 
+//NaN
 NaN;
 
+//Exemple de calcul
 3*12.5e3+63e-1>=46e-3;
 NaN>12;
+

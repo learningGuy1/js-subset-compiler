@@ -5,9 +5,10 @@
 
 (*On utilise des expressions régulières pour reconnaître des patterns*)
 rule token = parse
-	[' ' '\t' '\r' '\n']
-		{ token lexbuf } 	(*quand on lit un espace, une tabulation,...on ne crée pas de token*)	
+	[' ' '\t' '\r' '\n'] | "//"[^'\n']* | ("/*"([^'*']*('*'[^'/'])*)*"*/") 
 
+		{ token lexbuf } 	(*quand on lit un espace, une tabulation,... 
+					on ne crée pas de token*)
 	(*FLOTTANTS*)
 	| (['0'-'9']*'.'?['0'-'9']+)|(['0'-'9']+'.'?['0'-'9']*) as lexem
 		{ NUMBER(float_of_string lexem) }		(*Retourne Token NUMBER pour les flottants*)
@@ -45,7 +46,12 @@ rule token = parse
 		{ LO }
 	| '!'
 		{ NOT }
-		
+	
+	(*VARIABLES*)
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* as lexem
+		{ VAR(lexem) }
+	| '='
+		{ ASSIGN }
 		
 	| ';'
 		{ EOCOMMAND }
