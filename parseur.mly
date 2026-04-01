@@ -4,8 +4,10 @@
 
 %token <float> NUMBER
 %token <bool> BOOLEAN
-%token PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND EOF
+%token <string> VAR
+%token PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND EOF ASSIGN
 
+%left ASSIGN
 %left EQ
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
@@ -19,7 +21,7 @@
 %start main 
 %%
 main:
-	commande { Prog($1::[]) }
+	commande EOF { Prog($1::[]) }
 	| commande main  { let Prog(l)=$2 in Prog($1::l) } 
 	;
 commande:
@@ -34,17 +36,21 @@ expression:
 	| MINUS expression %prec UMINUS	{ Neg $2 }
 	| NUMBER 			{ Num($1) }
 	| expression EQ expression
-		{ Eq($1,$3)}
+		{ Eq($1,$3) }
 	| expression GREQ expression
-		{Greq($1,$3)}
+		{ Greq($1,$3) }
 	| expression GR expression
-		{Gr($1,$3)}
+		{ Gr($1,$3) }
 	| expression LOEQ expression
-		{Loeq($1,$3)}
+		{ Loeq($1,$3) }
 	| expression LO expression
-		{Lo($1,$3)}
+		{ Lo($1,$3) }
 	| NOT expression
-		{Not($2)}
+		{ Not($2) }
 	| BOOLEAN
-		{Bool($1)}
+		{ Bool($1) }
+	| expression ASSIGN expression
+		{ Assign($1,$3) }
+	| VAR
+		{ Var($1) }
 	;

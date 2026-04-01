@@ -16,6 +16,8 @@ and expression_a =
 	| Lo of expression_a * expression_a
 	| Not of expression_a
 	| Bool of bool
+	| Assign of expression_a * expression_a
+	| Var of string
 ;;
 
 (* Fonctions d'affichage *)
@@ -40,6 +42,8 @@ and print_expr form expr = match expr with
 	| Lo (g,d) -> print_binaire form "<" g d
 	| Not f -> Format.fprintf form "%s %a" "!" print_expr f
 	| Bool b -> Format.fprintf form "Bool[%b]" b
+	| Assign (g,d) -> print_binaire form "=" g d
+	| Var x -> Format.fprintf form "Var[%s]" x 
 and print_binaire form s g d =
 	Format.fprintf form "%s%s %a%s %a%s" s "(" print_expr g " ," print_expr d " )"
 ;;
