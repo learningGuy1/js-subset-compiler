@@ -32,6 +32,11 @@ rule token = parse
 	| ')'
 		{ DPAREN }
 		
+	| "if"
+		{ IF }
+	| "else"
+		{ ELSE }
+	
 	(*BOOLEENS*)
 	| "true"|"false" 
 		{ BOOLEAN }
