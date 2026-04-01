@@ -1,5 +1,5 @@
 //Flottants seuls
-123;
+123 + 0.456 ;
 .456;
 789.;
 0.9;
@@ -16,3 +16,4 @@ NaN;
 //Exemple de calcul
 3*12.5e3+63e-1>=46e-3;
 NaN>12;
+

@@ -16,6 +16,8 @@ and expression_a =
 	| Lo of expression_a * expression_a
 	| Not of expression_a
 	| Bool of bool
+	| Assign of string * expression_a
+	| Var of string
 ;;
 
 (* Fonctions d'affichage *)
@@ -40,8 +42,10 @@ and print_expr form expr = match expr with
 	| Lo (g,d) -> print_binaire form "<" g d
 	| Not f -> Format.fprintf form "%s %a" "!" print_expr f
 	| Bool b -> Format.fprintf form "Bool[%b]" b
+	| Assign (g,d) -> Format.fprintf form "=(Var[%s], %a)" g print_expr d
+	| Var x -> Format.fprintf form "Var[%s]" x 
 and print_binaire form s g d =
-	Format.fprintf form "%s%s %a%s %a%s" s "(" print_expr g " ," print_expr d " )"
+	Format.fprintf form "%s%s%a%s%a%s" s "(" print_expr g ", " print_expr d ")"
 ;;
 
 let rec code prog = match prog with
@@ -68,4 +72,6 @@ and com_expr expr = match expr with
 	| Lo (g,d) -> com_expr g ^ com_expr d ^ "LoStNb\n"
 	| Not f -> com_expr f ^ "Not\n"
 	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
+	| Assign (g,d) -> com_expr d ^ "SetVar " ^ g ^ "\n"
+	| Var x -> "GetVar " ^ x ^ "\n"
 ;;
