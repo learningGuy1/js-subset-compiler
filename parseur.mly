@@ -49,7 +49,7 @@ expression:
 		{ Not($2) }
 	| BOOLEAN
 		{ Bool($1) }
-	| expression ASSIGN expression
+	| VAR ASSIGN expression
 		{ Assign($1,$3) }
 	| VAR
 		{ Var($1) }

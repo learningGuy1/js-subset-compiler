@@ -1,7 +1,8 @@
 x = 12;
-y = 0.38e2
+y = 0.38e2;
 a5;
 aEDEKdsd_36617;
 g_______ = 12;
-y379311+12e-3>=(!true<false) = NaN==false;
-z = x+y;
+x = 12;
+y = .38e2;
+z = x + y;
