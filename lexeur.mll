@@ -5,7 +5,8 @@
 
 (*On utilise des expressions régulières pour reconnaître des patterns*)
 rule token = parse
-	[' ' '\t' '\r' '\n']
+	[' ' '\t' '\r' '\n'] | "//"[^'\n']* | ("/*"([^'*']*('*'[^'/'])*)*"*/") 
+
 		{ token lexbuf } 	(*quand on lit un espace, une tabulation,... 
 					on ne crée pas de token*)	
 
