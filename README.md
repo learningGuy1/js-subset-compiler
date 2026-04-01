@@ -21,5 +21,6 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 # Changements
 
-- Ajout de la notation scientifique des flottants et de NaN
-- Modification de la regexp des flottants pour plus de flexibilité
+- Ajout des variables
+- Modification du main pour imprimer les messages d'erreur dans le terminal
+- Ajout d'un fichier test *test_var* pour tester les nouveaux ajouts 
