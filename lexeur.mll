@@ -56,6 +56,8 @@ rule token = parse
 	(*VARIABLES*)
 	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*
 		{ VAR }
+	| "&&"
+		{ ET}
 	| '='
 		{ ASSIGN }
 		
