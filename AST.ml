@@ -56,7 +56,39 @@ and code_list l = match l with
 	| com::q -> code_com com ^ code_list q
 
 and code_com com = match com with
-	| Expr e -> com_expr e
+	| Expr e -> com_expr (opti_expr e)
+
+and opti_expr expr = match expr with
+	Plus (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
+				match (a,b) with
+				(Num x, Num y) -> Num (x+.y)
+				|_ -> Plus(a,b))
+	|Moins (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
+				match (a,b) with
+				(Num x, Num y) -> Num (x-.y)
+				|_ -> Moins(a,b))
+	|Mult (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
+				match (a,b) with
+				(Num x, Num y) -> Num (x*.y)
+				|_ -> Mult(a,b))
+	|Div (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
+				match (a,b) with
+				(Num x, Num y) -> Num (x/.y)
+				|_ -> Div(a,b))
+	|Neg e -> (let a = opti_expr e in
+				match a with
+				Num x -> Num (-.x)
+				|_ -> Neg a)
+	|Num n -> expr
+	| Eq (g,d) -> Eq (opti_expr g, opti_expr d)
+	| Greq (g,d) -> Greq (opti_expr g, opti_expr d)
+	| Gr (g,d) -> Gr (opti_expr g, opti_expr d)
+	| Loeq (g,d) -> Loeq (opti_expr g, opti_expr d)
+	| Lo (g,d) -> Lo (opti_expr g, opti_expr d)
+	| Not f -> Not (opti_expr f)
+	| Bool b -> expr
+	| Assign (g,d) -> Assign(g, opti_expr d)
+	| Var x -> expr
 
 and com_expr expr = match expr with
 	Plus (g,d) -> com_expr g ^ com_expr d ^ "AddiNb\n"
@@ -74,4 +106,23 @@ and com_expr expr = match expr with
 	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
 	| Assign (g,d) -> com_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
-;;
+
+
+
+(*and com_expr expr = match expr with
+	Plus (g,d) -> com_expr g ^ com_expr d ^ "AddiNb\n"
+	| Moins (g,d) -> com_expr g ^ com_expr d ^ "SubiNb\n"
+	| Mult (g,d) -> com_expr g ^ com_expr d ^ "MultNb\n"
+	| Div (g,d) -> com_expr g ^ com_expr d ^ "DiviNb\n"
+	| Neg e -> com_expr e ^ "NegaNb\n"
+	| Num n -> "CstNb " ^ (string_of_float n) ^ "\n"
+	| Eq (g,d) -> com_expr g ^ com_expr d ^ "Equals\n"
+	| Greq (g,d) -> com_expr g ^ com_expr d ^ "GrEqNb\n"
+	| Gr (g,d) -> com_expr g ^ com_expr d ^ "GrStNb\n"
+	| Loeq (g,d) -> com_expr g ^ com_expr d ^ "LoEqNb\n"
+	| Lo (g,d) -> com_expr g ^ com_expr d ^ "LoStNb\n"
+	| Not f -> com_expr f ^ "Not\n"
+	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
+	| Assign (g,d) -> com_expr d ^ "SetVar " ^ g ^ "\n"
+	| Var x -> "GetVar " ^ x ^ "\n"
+*);;
