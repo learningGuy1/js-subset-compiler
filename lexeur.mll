@@ -31,11 +31,6 @@ rule token = parse
 	| ')'
 		{ DPAREN }
 		
-	| "if"
-		{ IF }
-	| "else"
-		{ ELSE }
-	
 	(*BOOLEENS*)
 	| "true"|"false" as lexem
 		{ BOOLEAN(bool_of_string lexem) }
@@ -53,17 +48,40 @@ rule token = parse
 		{ NOT }
 	
 	(*VARIABLES*)
-	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*
-		{ VAR() }
-	(* Et logique *)
-	| "&&"
-		{ ET}	
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* as lexem
+		{ VAR(lexem) }
 	| '='
 		{ ASSIGN }
 		
 	| ';'
 		{ EOCOMMAND }
+	(* if then else *)
+	| "if"
+		{ IF }
+	| "else"
+		{ ELSE }
+	
+	
+	(* Et logique *)
+	| "&&"
+		{ ET}	
+
 	| eof
 		{ EOF }
 	| _
 		{ raise TokenInconnu }	(*Lance une exception quand symbole inconnu*)
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
