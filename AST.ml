@@ -2,6 +2,9 @@ type programme_a =
 	Prog of commande_a list
 and commande_a =
 	Expr of expression_a
+	| Block of programme_a
+	| IfThenElse of expression_a * commande_a* commande_a
+	| Semicol
 and expression_a =
 	| Plus of expression_a * expression_a
 	| Moins of expression_a * expression_a
@@ -18,6 +21,7 @@ and expression_a =
 	| Bool of bool
 	| Assign of string * expression_a
 	| Var of string
+	| Et of expression_a * expression_a
 ;;
 
 (* Fonctions d'affichage *)
@@ -28,6 +32,12 @@ let rec print_programme form prog = match prog with
 					| [] -> ())
 and print_commande form com = match com with
 	| Expr e -> Format.fprintf form "Exp(%a)\n" print_expr e
+	| Block c -> Format.fprintf form "Block( %a )\n" print_programme c 
+	| IfThenElse (cond,den,els) ->    Format.fprintf form "IfThenElse( %a , %a , %a )\n"
+      print_expr cond
+      print_commande den
+      print_commande els 
+     | Semicol -> Format.fprintf form ""
 and print_expr form expr = match expr with
 	| Plus (g,d) -> print_binaire form "+" g d
 	| Moins (g,d) -> print_binaire form "-" g d
@@ -43,7 +53,9 @@ and print_expr form expr = match expr with
 	| Not f -> Format.fprintf form "%s %a" "!" print_expr f
 	| Bool b -> Format.fprintf form "Bool[%b]" b
 	| Assign (g,d) -> Format.fprintf form "=(Var[%s], %a)" g print_expr d
-	| Var x -> Format.fprintf form "Var[%s]" x 
+	| Var x -> Format.fprintf form "Var[%s]" x
+	| Et (g,d) -> print_binaire form "&&" g d
+	
 and print_binaire form s g d =
 	Format.fprintf form "%s%s%a%s%a%s" s "(" print_expr g ", " print_expr d ")"
 ;;

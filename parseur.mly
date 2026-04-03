@@ -5,13 +5,17 @@
 %token <float> NUMBER
 %token <bool> BOOLEAN
 %token <string> VAR
-%token PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND EOF ASSIGN
+
+
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK
 
 %left ASSIGN
+%left ET
 %left EQ
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
 %left TIMES DIV		
+
 %nonassoc NOT UMINUS 	
 
 %type <AST.programme_a> main
@@ -21,11 +25,16 @@
 %start main 
 %%
 main:
-	commande EOF { Prog($1::[]) }
+	| EOF { Prog([]) }
+	| commande { Prog($1::[]) }
 	| commande main  { let Prog(l)=$2 in Prog($1::l) } 
+	
 	;
 commande:
 	expression EOCOMMAND 		{ Expr($1) }
+	| EOCOMMAND {Semicol}
+	| OBLOCK main FBLOCK { Block($2) }
+	| IF GPAREN expression DPAREN commande ELSE commande { IfThenElse($3,$5, $7) } 
 	;
 expression:
 	expression PLUS expression 	{ Plus($1,$3) }
@@ -53,4 +62,6 @@ expression:
 		{ Assign($1,$3) }
 	| VAR
 		{ Var($1) }
+	| expression ET expression { Et($1,$3) }
+	
 	;
