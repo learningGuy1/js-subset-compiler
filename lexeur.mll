@@ -16,11 +16,12 @@ rule token = parse
 	(*FLOTTANTS SCIENTIFIQUES*)
 	| ( (['0'-'9']*'.'?['0'-'9']+)|(['0'-'9']+'.'?['0'-'9']*) )'e''-'?['0'-'9']+
 		{ NUMBER }
+	(*VARIABLES*)
 	(*NaN*)
 	| "NaN"
 		{ NUMBER }
 	| '+'
-		{ PLUS }		(*...*)
+		{ PLUS }		
 	| '-'
 		{ MINUS }
 	| '*'
@@ -31,7 +32,17 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
+	(*Parentheses de block de code *)
+	| '{'
+		{ OBLOCK}
+	| '}'
+		{ FBLOCK }
 		
+	| "if"
+		{ IF }
+	| "else"
+		{ ELSE }
+	
 	(*BOOLEENS*)
 	| "true"|"false" 
 		{ BOOLEAN }
@@ -47,15 +58,15 @@ rule token = parse
 		{ LO }
 	| '!'
 		{ NOT }
-	
-	(*VARIABLES*)
-	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*
-		{ VAR }
+	| "&&"
+		{ ET}
 	| '='
 		{ ASSIGN }
 		
 	| ';'
 		{ EOCOMMAND }
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* 
+		{ VAR }
 	| eof
 		{ EOF }
 	| _
