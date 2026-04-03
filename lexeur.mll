@@ -19,7 +19,7 @@ rule token = parse
 	| "NaN"
 		{ NUMBER(nan) }
 	| '+'
-		{ PLUS }
+		{ PLUS }		
 	| '-'
 		{ MINUS }
 	| '*'
@@ -30,6 +30,11 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
+	(*Parentheses de block de code *)
+	| '{'
+		{ OBLOCK}
+	| '}'
+		{ FBLOCK }
 		
 	(*BOOLEENS*)
 	| "true"|"false" as lexem
@@ -46,16 +51,13 @@ rule token = parse
 		{ LO }
 	| '!'
 		{ NOT }
-	
-	(*VARIABLES*)
-	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* as lexem
-		{ VAR(lexem) }
+	| "&&"
+		{ ET}
 	| '='
 		{ ASSIGN }
 		
 	| ';'
 		{ EOCOMMAND }
-	(* if then else *)
 	| "if"
 		{ IF }
 	| "else"
@@ -65,7 +67,8 @@ rule token = parse
 	(* Et logique *)
 	| "&&"
 		{ ET}	
-
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*  as lexem
+		{ VAR(lexem) }
 	| eof
 		{ EOF }
 	| _

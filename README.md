@@ -26,3 +26,10 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 - Modification du main pour imprimer les messages d'erreur dans le terminal et distinguer les erreurs de lexing et de parsing
 - Ajout de fichiers tests *test_ast*, *test_commentaires*, *test_flottants_scientifiques* et *test_var* pour tester les différentes parties du projet
 - Modifications mineures des fonctions d'affichage de AST.ml
+- Le fichier AST.ml n'est plus suivi dans cette branche (il s'agissait d'un ajout superflu sur un commit précédent)
+- Ajout de fichiers tests *test_if_then_else*,pour tester les if then else parties du projet
+- ajout du '&&' ET-logique et reconnaissance du if then else
+- modification de la grammaire pour integrer les commandes comme bloc de code dans des acollades '{}'
+
+
+
