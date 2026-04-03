@@ -12,11 +12,19 @@
 %start main 
 %%
 main:
-	commande EOF {}
-	| commande main  {} 
+	 EOF {}
+	| commande {}
+	| commande main  {}
+	
 	;
 commande:
-	expression EOCOMMAND 		{}
+	expression EOCOMMAND {}
+	| EOCOMMAND {}
+	| OBLOCK main FBLOCK {}
+	| IF GPAREN expression DPAREN commande ELSE commande {} 
+	
+
+	
 	;
 expression:
 	expression PLUS expression {}
@@ -36,7 +44,5 @@ expression:
 	| expression ASSIGN expression {}
 	| VAR {}
 	| expression ET expression {}
-	| IF GPAREN expression DPAREN main %prec IF {}
-	| IF GPAREN expression DPAREN main ELSE main {}
 	
 	;
