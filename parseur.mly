@@ -26,6 +26,7 @@
 %%
 main:
 	| EOF { Prog([]) }
+	| commande { Prog($1::[]) }
 	| commande main  { let Prog(l)=$2 in Prog($1::l) } 
 	
 	;
