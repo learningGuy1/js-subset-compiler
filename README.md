@@ -37,4 +37,4 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 - Génération de code assembleur du ifthenelse
 - Génération de code assembleur du Et-logique
 - Nettoyage du code et lisibilité
-- Modification dans AST.ml pour générer l'abre des nouvelles if_then_else, Et_logique , commande ';' ainsi que le block "{code}" de commande
+- 

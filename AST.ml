@@ -74,8 +74,8 @@ and code_com com = match com with
 	| Block b -> code b
 	| Semicol -> ""
 	| IfThenElse (cond, den , els ) -> (com_expr cond ^ "ConJmp " ^
-										(string_of_int ((com_length den)+ (com_length els) + 2) ) ^
-										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ code_com els )
+										(string_of_int ((com_length den)+ (com_length els) + 2) ) ^ "\n" ^
+										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ "\n" ^code_com els )
 
 	
 (* ================= OPTIMISATION ================= *)
