@@ -16,4 +16,3 @@ NaN;
 //Exemple de calcul
 3*12.5e3+63e-1>=46e-3;
 NaN>12;
-

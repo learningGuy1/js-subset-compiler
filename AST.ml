@@ -33,11 +33,11 @@ let rec print_programme form prog = match prog with
 and print_commande form com = match com with
 	| Expr e -> Format.fprintf form "Exp(%a)\n" print_expr e
 	| Block c -> Format.fprintf form "Block( %a )\n" print_programme c 
-	| IfThenElse (cond,den,els) ->    Format.fprintf form "IfThenElse( %a , %a , %a )\n"
+	| IfThenElse (cond,den,els) -> Format.fprintf form "IfThenElse( %a , %a , %a )\n"
       print_expr cond
       print_commande den
       print_commande els 
-     | Semicol -> Format.fprintf form ""
+    | Semicol -> Format.fprintf form ""
 and print_expr form expr = match expr with
 	| Plus (g,d) -> print_binaire form "+" g d
 	| Moins (g,d) -> print_binaire form "-" g d
@@ -58,22 +58,62 @@ and print_expr form expr = match expr with
 	
 and print_binaire form s g d =
 	Format.fprintf form "%s%s%a%s%a%s" s "(" print_expr g ", " print_expr d ")"
-;;
-
+	
 let rec code prog = match prog with
 	| Prog(l) -> code_list l
 	
 and code_list l = match l with
 	| [] -> "Halt"
 	| com::q -> code_com com ^ code_list q
-	
+
 and code_com com = match com with
-	| Expr e -> com_expr e
+	| Expr e -> com_expr (opti_expr e)
 	| Block b -> code b
 	| Semicol -> ""
-	| IfThenElse (cond,den,els) -> (com_expr cond ^
-      code_com den ^
-      code_com els )
+	| IfThenElse (cond, den , els ) -> (com_expr cond ^ "ConJmp " ^
+										(string_of_int ((com_length den)+ (com_length els) + 2) ) ^
+										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^
+and code_length_list l = match l with
+	| [] -> 0
+	| c::q -> com_length c + code_length_list q	
+and com_length com = match com with
+	| Expr e -> expr_length e
+	| Semicol -> 0
+	| Block (Prog l) -> code_length_list l
+	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2
+
+and opti_expr expr = match expr with
+	Plus (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
+				match (a,b) with
+				(Num x, Num y) -> Num (x+.y)
+				|_ -> Plus(a,b))
+	|Moins (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
+				match (a,b) with
+				(Num x, Num y) -> Num (x-.y)
+				|_ -> Moins(a,b))
+	|Mult (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
+				match (a,b) with
+				(Num x, Num y) -> Num (x*.y)
+				|_ -> Mult(a,b))
+	|Div (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
+				match (a,b) with
+				(Num x, Num y) -> Num (x/.y)
+				|_ -> Div(a,b))
+	|Neg e -> (let a = opti_expr e in
+				match a with
+				Num x -> Num (-.x)
+				|_ -> Neg a)
+	|Num n -> expr
+	| Eq (g,d) -> Eq (opti_expr g, opti_expr d)
+	| Greq (g,d) -> Greq (opti_expr g, opti_expr d)
+	| Gr (g,d) -> Gr (opti_expr g, opti_expr d)
+	| Loeq (g,d) -> Loeq (opti_expr g, opti_expr d)
+	| Lo (g,d) -> Lo (opti_expr g, opti_expr d)
+	| Not f -> Not (opti_expr f)
+	| Bool b -> expr
+	| Assign (g,d) -> Assign(g, opti_expr d)
+	| Var x -> expr
+	| Et (g,d) -> Et (opti_expr g, opti_expr d)
 and com_expr expr = match expr with
 	Plus (g,d) -> com_expr g ^ com_expr d ^ "AddiNb\n"
 	| Moins (g,d) -> com_expr g ^ com_expr d ^ "SubiNb\n"
@@ -89,8 +129,9 @@ and com_expr expr = match expr with
 	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
 	| Assign (g,d) -> com_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
-	| Not e -> 
-	| Et (g,d) -> com_expr g ^ "ConJmp " ^ (string_of_int ((expr_length d)+ 1) ) ^ "\n" ^ com_expr d ^ "ConJmp 2\n" ^ "CsteBo true\n" ^ "Jump 1\n" ^ "CsteBo false\n"
+	| Not f -> com_expr f ^ "Not\n"
+	| Et (g,d) -> com_expr g ^ "ConJmp " ^ (string_of_int ((expr_length d)+ 3) ) ^ "\n" ^ com_expr d  ^ "Jump 1\n" ^ "CsteBo false\n" 
+
 and expr_length expr = match expr with
 	| Plus (g,d) -> 1 + expr_length g + expr_length d
 	| Moins (g,d) -> 1 + expr_length g + expr_length d
@@ -109,3 +150,8 @@ and expr_length expr = match expr with
 	| Var x -> 1
 	| Et (g,d) -> 1 + expr_length g + expr_length d
 ;;
+
+
+
+
+
