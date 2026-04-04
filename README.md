@@ -33,8 +33,8 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 - Modification de AST.ml pour permettre une optimisation au moment de la compilation
 - Ce fragment ne nécessitant pas de modification d'autres fichiers, aucun tag p3.2 n'a été fait puisque le lexeur et le parseur n'ont pas été changés depuis la version précédente.
 - Ajout du fichier test *test_opti* pour tester l'optimisation implémentée.
-***Version actuelle: c4.0***
+***Version actuelle: c4.3***
 - Génération de code assembleur du ifthenelse
 - Génération de code assembleur du Et-logique
 - Nettoyage du code et lisibilité
-- 
+- ajout fichiers test pour le et logique
