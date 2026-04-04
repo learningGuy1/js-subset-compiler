@@ -66,10 +66,14 @@ let rec code prog = match prog with
 and code_list l = match l with
 	| [] -> "Halt"
 	| com::q -> code_com com ^ code_list q
-
+	
 and code_com com = match com with
 	| Expr e -> com_expr e
-
+	| Block b -> code b
+	| Semicol -> ""
+	| IfThenElse (cond,den,els) -> (com_expr cond ^
+      code_com den ^
+      code_com els )
 and com_expr expr = match expr with
 	Plus (g,d) -> com_expr g ^ com_expr d ^ "AddiNb\n"
 	| Moins (g,d) -> com_expr g ^ com_expr d ^ "SubiNb\n"
@@ -81,9 +85,27 @@ and com_expr expr = match expr with
 	| Greq (g,d) -> com_expr g ^ com_expr d ^ "GrEqNb\n"
 	| Gr (g,d) -> com_expr g ^ com_expr d ^ "GrStNb\n"
 	| Loeq (g,d) -> com_expr g ^ com_expr d ^ "LoEqNb\n"
-	| Lo (g,d) -> com_expr g ^ com_expr d ^ "LoStNb\n"
-	| Not f -> com_expr f ^ "Not\n"
+	| Lo (g,d) -> com_expr g ^ com_expr d ^ "LoStNb\n" 
 	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
 	| Assign (g,d) -> com_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
+	| Not e -> 
+	| Et (g,d) -> com_expr g ^ "ConJmp " ^ (string_of_int ((expr_length d)+ 1) ) ^ "\n" ^ com_expr d ^ "ConJmp 2\n" ^ "CsteBo true\n" ^ "Jump 1\n" ^ "CsteBo false\n"
+and expr_length expr = match expr with
+	| Plus (g,d) -> 1 + expr_length g + expr_length d
+	| Moins (g,d) -> 1 + expr_length g + expr_length d
+	| Mult (g,d) -> 1 + expr_length g + expr_length d
+	| Div (g,d) -> 1 + expr_length g + expr_length d
+	| Neg e -> 1 + expr_length e 
+	| Num n -> 1 
+	| Not e -> 1 + expr_length e
+	| Eq (g,d) -> 1 + expr_length g + expr_length d
+	| Greq (g,d) -> 1 + expr_length g + expr_length d
+	| Gr (g,d) -> 1 + expr_length g + expr_length d
+	| Loeq (g,d) -> 1 + expr_length g + expr_length d
+	| Lo (g,d) -> 1 + expr_length g + expr_length d
+	| Bool b ->  1 
+	| Assign (_,d) -> 1 + expr_length d
+	| Var x -> 1
+	| Et (g,d) -> 1 + expr_length g + expr_length d
 ;;

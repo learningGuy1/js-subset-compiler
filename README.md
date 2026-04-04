@@ -30,8 +30,9 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 - Modifications mineures des fonctions d'affichage de AST.ml
 - Le fichier AST.ml n'est plus suivi dans cette branche (il s'agissait d'un ajout superflu sur un commit précédent)
 - Ajout de fichiers tests *test_if_then_else*,pour tester les if then else parties du projet
-- ajout du '&&' ET-logique et reconnaissance du if then else
-- modification de la grammaire pour integrer les commandes comme bloc de code dans des acollades '{}'
-
+- Ajout du '&&' ET-logique et reconnaissance du if then else fonctionne
+- Modification de la grammaire pour integrer les commandes comme bloc de code dans des acollades '{}'
+- Reconnaissance de ';' comme commande 
+- Modification dans AST.ml pour générer l'abre des nouvelles if_then_else, Et_logique , commande ';' ainsi que le block "{code}" de commande
 
 
