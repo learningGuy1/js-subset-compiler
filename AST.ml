@@ -24,7 +24,8 @@ and expression_a =
 	| Et of expression_a * expression_a
 ;;
 
-(* Fonctions d'affichage *)
+(* ================= FONCTIONS AFFICHAGE ================= *)
+
 
 let rec print_programme form prog = match prog with
 	| Prog(l) -> (match l with 
@@ -58,12 +59,14 @@ and print_expr form expr = match expr with
 	
 and print_binaire form s g d =
 	Format.fprintf form "%s%s%a%s%a%s" s "(" print_expr g ", " print_expr d ")"
-	
+;;
+		(* ================= CODE ================= *)
+		
 let rec code prog = match prog with
 	| Prog(l) -> code_list l
 	
 and code_list l = match l with
-	| [] -> "Halt"
+	| [] -> ""
 	| com::q -> code_com com ^ code_list q
 
 and code_com com = match com with
@@ -72,15 +75,10 @@ and code_com com = match com with
 	| Semicol -> ""
 	| IfThenElse (cond, den , els ) -> (com_expr cond ^ "ConJmp " ^
 										(string_of_int ((com_length den)+ (com_length els) + 2) ) ^
-										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^
-and code_length_list l = match l with
-	| [] -> 0
-	| c::q -> com_length c + code_length_list q	
-and com_length com = match com with
-	| Expr e -> expr_length e
-	| Semicol -> 0
-	| Block (Prog l) -> code_length_list l
-	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2
+										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ code_com els )
+
+	
+(* ================= OPTIMISATION ================= *)
 
 and opti_expr expr = match expr with
 	Plus (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
@@ -149,6 +147,16 @@ and expr_length expr = match expr with
 	| Assign (_,d) -> 1 + expr_length d
 	| Var x -> 1
 	| Et (g,d) -> 1 + expr_length g + expr_length d
+	
+	(*===============Fonctions calcul de longeur =================*)
+and code_length_list l = match l with
+	| [] -> 0
+	| c::q -> com_length c + code_length_list q	
+and com_length com = match com with
+	| Expr e -> expr_length e
+	| Semicol -> 0
+	| Block (Prog l) -> code_length_list l
+	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2
 ;;
 
 
