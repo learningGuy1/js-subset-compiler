@@ -38,7 +38,7 @@ expression:
 	| expression LO expression {}
 	| NOT expression %prec NOT {}
 	| BOOLEAN {}
-	| expression ASSIGN expression {}
+	| VAR ASSIGN expression {}
 	| VAR {}
 	| expression ET expression {}
 	;
