@@ -1,7 +1,6 @@
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE
 
-%left ASSIGN
-%left ET
+%left ASSIGN ET
 %left EQ
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
@@ -15,16 +14,14 @@ main:
 	 EOF {}
 	| commande {}
 	| commande main  {}
-	
 	;
 commande:
 	expression EOCOMMAND {}
 	| EOCOMMAND {}
 	| OBLOCK main FBLOCK {}
 	| IF GPAREN expression DPAREN commande ELSE commande {} 
-	
-
-	
+	| WHILE GPAREN expression DPAREN commande {}
+	| DO commande WHILE GPAREN expression DPAREN {}
 	;
 expression:
 	expression PLUS expression {}
@@ -44,5 +41,4 @@ expression:
 	| expression ASSIGN expression {}
 	| VAR {}
 	| expression ET expression {}
-	
 	;

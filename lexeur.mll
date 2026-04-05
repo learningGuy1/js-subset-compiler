@@ -32,17 +32,25 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
-	(*Parentheses de block de code *)
+
+	(*ACCOLADES POUR BLOC DE CODE*)
 	| '{'
 		{ OBLOCK}
 	| '}'
 		{ FBLOCK }
-		
+	
+	(*CONDITIONNEL IF*)
 	| "if"
 		{ IF }
 	| "else"
 		{ ELSE }
 	
+	(*CONDITIONNEL WHILE*)
+	| "do"
+		{ DO }
+	| "while"
+		{ WHILE }
+
 	(*BOOLEENS*)
 	| "true"|"false" 
 		{ BOOLEAN }
