@@ -1,0 +1,12 @@
+x=3;
+do { x=x+1; } while(x<12);
+if(x==12&&true){
+	while(x>0){
+		if(x==5) x = 2;
+		else x = x-1;
+	}
+}else{
+	while(y==0 && x == true && false){
+		y = 0;
+	}
+}

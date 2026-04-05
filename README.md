@@ -19,16 +19,11 @@ make
 Le fichier en premier argument devra contenir une suite de commandes exécutables en JS.  
 Le fichier en second argument contiendra le résultat de l'exécution.
 
-# Changements
+## Changements
 
-- Double version du parseur concernant les parties p3.0 et p3.1
-- Ajout des variables
-- Ajout des commentaires simples et multi-lignes
-- Modification du main pour imprimer les messages d'erreur dans le terminal et distinguer les erreurs de lexing et de parsing
-- Ajout de fichiers tests *test_ast*, *test_commentaires*, *test_flottants_scientifiques* et *test_var* pour tester les différentes parties du projet
-- Le fichier AST.ml n'est plus suivi dans cette branche (il s'agissait d'un ajout superflu sur un commit précédent)
-- Ajout de fichiers tests *test_if_then_else*,pour tester les if then else parties du projet
-- ajout du '&&' ET-logique et reconnaissance du if then else
-- modification de la grammaire pour integrer les commandes comme bloc de code dans des acollades '{}'
-
-
+***Version actuelle: p4.0/p4.1/p4.2/p4.3)***
+- Version du parseur concernant le fragment 4 entier. Le tag p4.3 est utilisé par souci de lisibilité des versions.
+- Répartition du travail:
+	- Edwin KAMTO: Fragment 4.0 ( _opérateur &&_ ), Fragment 4.1 ( _If_ ), Fragment 4.3 ( _Groupage d'instructions_ )
+	- Nino BERNARD: Fragment 4.2 (_do_while__) + _while_
+- Ajout de fichiers tests *test_et*, *test_if* et *test_while*
