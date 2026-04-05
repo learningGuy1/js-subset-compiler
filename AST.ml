@@ -4,6 +4,8 @@ and commande_a =
 	Expr of expression_a
 	| Block of programme_a
 	| IfThenElse of expression_a * commande_a* commande_a
+	| While of expression_a * commande_a
+	| DoWhile of commande_a * expression_a
 	| Semicol
 and expression_a =
 	| Plus of expression_a * expression_a
@@ -32,12 +34,18 @@ let rec print_programme form prog = match prog with
 					| [] -> ())
 and print_commande form com = match com with
 	| Expr e -> Format.fprintf form "Exp(%a)\n" print_expr e
-	| Block c -> Format.fprintf form "Block( %a )\n" print_programme c 
-	| IfThenElse (cond,den,els) ->    Format.fprintf form "IfThenElse( %a , %a , %a )\n"
+	| Block c -> Format.fprintf form "Block(%a)\n" print_programme c 
+	| IfThenElse (cond,den,els) -> Format.fprintf form "IfThenElse(%a, %a, %a)\n"
       print_expr cond
       print_commande den
       print_commande els 
-     | Semicol -> Format.fprintf form ""
+    | While (cond,com) -> Format.fprintf form "While(%a, %a)\n"
+      print_expr cond
+      print_commande com 
+    | DoWhile (com,cond) -> Format.fprintf form "DoWhile(%a, %a)\n"
+      print_commande com 
+      print_expr cond
+    | Semicol -> Format.fprintf form ""
 and print_expr form expr = match expr with
 	| Plus (g,d) -> print_binaire form "+" g d
 	| Moins (g,d) -> print_binaire form "-" g d
