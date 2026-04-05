@@ -6,11 +6,9 @@
 %token <bool> BOOLEAN
 %token <string> VAR
 
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE
 
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK
-
-%left ASSIGN
-%left ET
+%left ASSIGN ET
 %left EQ
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
@@ -31,10 +29,12 @@ main:
 	
 	;
 commande:
-	expression EOCOMMAND 		{ Expr($1) }
-	| EOCOMMAND {Semicol}
+	expression EOCOMMAND  { Expr($1) }
+	| EOCOMMAND { Semicol }
 	| OBLOCK main FBLOCK { Block($2) }
-	| IF GPAREN expression DPAREN commande ELSE commande { IfThenElse($3,$5, $7) } 
+	| IF GPAREN expression DPAREN commande ELSE commande { IfThenElse($3,$5,$7) } 
+	| WHILE GPAREN expression DPAREN commande { While($3,$5) }
+	| DO commande WHILE GPAREN expression DPAREN { DoWhile($2,$5) }
 	;
 expression:
 	expression PLUS expression 	{ Plus($1,$3) }
@@ -63,5 +63,4 @@ expression:
 	| VAR
 		{ Var($1) }
 	| expression ET expression { Et($1,$3) }
-	
 	;
