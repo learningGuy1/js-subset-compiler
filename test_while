@@ -1,0 +1,17 @@
+z = 3;
+while(z>=1){
+	y=0;
+	y=z;
+	y=y-1;
+	z=y;
+}
+
+
+do{
+	y = z;
+	y = z+1;
+	z = y;
+}while(z<3&&true&&!(false==true));
+
+x=z;
+do { x=x+1; } while(x<12);
