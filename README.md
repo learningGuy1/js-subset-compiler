@@ -21,20 +21,15 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: c3.0/c3.1***
-- Double version du concernant les parties p3.0 et p3.1
-- Ajout des variables
-- Ajout des commentaires simples et multi-lignes
-- Modification du main pour imprimer les messages d'erreur dans le terminal et distinguer les erreurs de lexing et de parsing
-- Ajout de fichiers tests *test_ast*, *test_commentaires*, *test_flottants_scientifiques* et *test_var* pour tester les différentes parties du projet
-- Modifications mineures des fonctions d'affichage de AST.ml
-- Le fichier AST.ml n'est plus suivi dans cette branche (il s'agissait d'un ajout superflu sur un commit précédent)
-***Version actuelle: c3.2***
-- Modification de AST.ml pour permettre une optimisation au moment de la compilation
-- Ce fragment ne nécessitant pas de modification d'autres fichiers, aucun tag p3.2 n'a été fait puisque le lexeur et le parseur n'ont pas été changés depuis la version précédente.
-- Ajout du fichier test *test_opti* pour tester l'optimisation implémentée.
-***Version actuelle: c4.3***
-- Génération de code assembleur du ifthenelse
-- Génération de code assembleur du Et-logique
-- Nettoyage du code et lisibilité
-- ajout fichiers test pour le et logique
+***Version actuelle: c4.0/c4.1/c4.2/c4.3)***
+- Version du parseur concernant le fragment 4 entier. Le tag c4.3 est utilisé par souci de lisibilité des versions.
+- Répartition du travail:
+	- Edwin KAMTO: Fragment 4.0 ( _opérateur &&_ ), Fragment 4.1 ( _If_ ), Fragment 4.3 ( _Groupage d'instructions_ )
+	- Nino BERNARD: Fragment 4.2 (_do_while__) + _while_
+- Ajout de fichiers tests *test_et*, *test_if* et *test_while*
+- Modification de *test_var* pour tester l'associativité
+- Suppression de l'instruction *Halt* optionnelle en attendant de trouver comment garder sa génération
+
+## Problèmes fixés
+
+- Fix d'une mauvaise gestion de l'associativité de l'opérateur d'assignement ( _=_ )
