@@ -26,3 +26,4 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 	- Edwin KAMTO: Fragment 4.0 ( _opérateur &&_ ), Fragment 4.1 ( _If_ ), Fragment 4.3 ( _Groupage d'instructions_ )
 	- Nino BERNARD: Fragment 4.2 (_do_while__) + _while_
 - Ajout de fichiers tests *test_et*, *test_if* et *test_while*
+- Ajout de reconnaissance de syntaxe de fonction ( appel, declaration de fonction)

@@ -75,6 +75,12 @@ rule token = parse
 		{ EOCOMMAND }
 	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* 
 		{ VAR }
+	| "function"
+		{ FUNC }
+	| "return"
+		{ RETURN }
+	| ","
+		{ COMMA }
 	| eof
 		{ EOF }
 	| _
