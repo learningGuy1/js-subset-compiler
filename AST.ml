@@ -7,6 +7,10 @@ and commande_a =
 	| While of expression_a * commande_a
 	| DoWhile of commande_a * expression_a
 	| Semicol
+	| Function of string * decl_args * commande_a
+	| Return of expression_a
+and decl_args =
+	| Dec_args of string list
 and expression_a =
 	| Plus of expression_a * expression_a
 	| Moins of expression_a * expression_a
@@ -24,6 +28,8 @@ and expression_a =
 	| Assign of string * expression_a
 	| Var of string
 	| Et of expression_a * expression_a
+and call_arguments_a =
+	| Call_args of expression_a
 ;;
 
 (* Fonctions d'affichage *)

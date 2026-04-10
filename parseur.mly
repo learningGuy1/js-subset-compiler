@@ -5,8 +5,7 @@
 %token <float> NUMBER
 %token <bool> BOOLEAN
 %token <string> VAR
-
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL
 
 %right ASSIGN
 %left ET
@@ -14,8 +13,8 @@
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
 %left TIMES DIV		
-
 %nonassoc NOT UMINUS 	
+
 
 %type <AST.programme_a> main
 %type <AST.commande_a> commande
@@ -27,7 +26,6 @@ main:
 	| EOF { Prog([]) }
 	| commande { Prog($1::[]) }
 	| commande main  { let Prog(l)=$2 in Prog($1::l) } 
-	
 	;
 commande:
 	expression EOCOMMAND  { Expr($1) }
@@ -36,6 +34,13 @@ commande:
 	| IF GPAREN expression DPAREN commande ELSE commande { IfThenElse($3,$5,$7) } 
 	| WHILE GPAREN expression DPAREN commande { While($3,$5) }
 	| DO commande WHILE GPAREN expression DPAREN { DoWhile($2,$5) }
+	| FUNC VAR GPAREN decl_args DPAREN commande {Function($2,$4,$6)}
+	| RETURN expression EOCOMMAND {Return($2)}
+	;
+decl_args:
+	| {Dec_args([])}
+	| VAR {Dec_args($1::[])}
+	| VAR COMMA decl_args {let Dec_args(l)=$3 in Dec_args($1::l)}
 	;
 expression:
 	expression PLUS expression 	{ Plus($1,$3) }
@@ -64,4 +69,9 @@ expression:
 	| VAR
 		{ Var($1) }
 	| expression ET expression { Et($1,$3) }
+	;
+arguments: 
+	| {Call_args ([])}
+	| expression {Call_args ($1)}
+	| expression COMMA arguments {let Call_args(l)=$3 in Call_args($1::l)}
 	;

@@ -71,17 +71,15 @@ rule token = parse
 		
 	| ';'
 		{ EOCOMMAND }
-	| "if"
-		{ IF }
-	| "else"
-		{ ELSE }
 	
-	
-	(* Et logique *)
-	| "&&"
-		{ ET}	
-	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*  as lexem
-		{ VAR(lexem) }
+	| "function"
+		{ FUNC }
+	| "return"
+		{ RETURN }
+	| ","
+		{ COMMA }
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* as lexem
+		{ VAR(lexem)}
 	| eof
 		{ EOF }
 	| _
