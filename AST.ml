@@ -10,6 +10,7 @@ and commande_a =
 	| Function of string * decl_args * commande_a
 	| Return of expression_a
 and decl_args =
+	| Epsilon
 	| Dec_args of string list
 and expression_a =
 	| Plus of expression_a * expression_a
@@ -28,8 +29,10 @@ and expression_a =
 	| Assign of string * expression_a
 	| Var of string
 	| Et of expression_a * expression_a
+	| FCall of string * call_arguments_a
 and call_arguments_a =
-	| Call_args of expression_a
+	| Epsilon
+	| Call_args of expression_a list
 ;;
 
 (* Fonctions d'affichage *)

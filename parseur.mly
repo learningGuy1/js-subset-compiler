@@ -5,7 +5,7 @@
 %token <float> NUMBER
 %token <bool> BOOLEAN
 %token <string> VAR
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL EPSILON
 
 %right ASSIGN
 %left ET
@@ -38,7 +38,7 @@ commande:
 	| RETURN expression EOCOMMAND {Return($2)}
 	;
 decl_args:
-	| {Dec_args([])}
+	| EPSILON {Epsilon}
 	| VAR {Dec_args($1::[])}
 	| VAR COMMA decl_args {let Dec_args(l)=$3 in Dec_args($1::l)}
 	;
@@ -69,9 +69,10 @@ expression:
 	| VAR
 		{ Var($1) }
 	| expression ET expression { Et($1,$3) }
+	| VAR GPAREN arguments DPAREN{ FCall($1,$3)}
 	;
 arguments: 
-	| {Call_args ([])}
-	| expression {Call_args ($1)}
+	| EPSILON {Epsilon}
+	| expression {Call_args ($1::[])}
 	| expression COMMA arguments {let Call_args(l)=$3 in Call_args($1::l)}
 	;
