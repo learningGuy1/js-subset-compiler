@@ -55,6 +55,17 @@ and print_commande form com = match com with
       print_commande com 
       print_expr cond
     | Semicol -> Format.fprintf form ""
+    | Function (f,param,fcode) -> Format.fprintf form "%s((%a),%a)\n"
+    	f
+    	print_param param
+    	print_commande fcode
+    | Return a -> Format.fprintf form "Return(%a)" print_expr a
+and print_param form param = match param with
+	| Epsilon -> Format.fprintf form ""
+	| Dec_args l -> match l with 
+		| [] -> Format.fprintf form ""
+		| la::[] -> Format.fprintf form "%s" la
+		| a::ll -> Format.fprintf form "%s,%a" a print_param (Dec_args ll)
 and print_expr form expr = match expr with
 	| Plus (g,d) -> print_binaire form "+" g d
 	| Moins (g,d) -> print_binaire form "-" g d
@@ -72,7 +83,13 @@ and print_expr form expr = match expr with
 	| Assign (g,d) -> Format.fprintf form "=(Var[%s], %a)" g print_expr d
 	| Var x -> Format.fprintf form "Var[%s]" x
 	| Et (g,d) -> print_binaire form "&&" g d
-	
+	| FCall(f,expr_args) -> Format.fprintf form "%s(%a)" f print_Call_args expr_args
+and print_Call_args form expr_args = match expr_args with 
+	| Epsilon -> Format.fprintf form ""
+	| Call_args(args)->match args with
+		| [] -> Format.fprintf form ""
+		| a::[] -> Format.fprintf form "%a" print_expr a
+		| a::ll -> Format.fprintf form "%a,%a" print_expr a print_Call_args (Call_args ll)  
 and print_binaire form s g d =
 	Format.fprintf form "%s%s%a%s%a%s" s "(" print_expr g ", " print_expr d ")"
 ;;
