@@ -19,6 +19,9 @@
 %type <AST.programme_a> main
 %type <AST.commande_a> commande
 %type <AST.expression_a> expression
+%type <AST.call_arguments_a> arguments
+%type <AST.decl_args> decl_args
+
 
 %start main 
 %%
@@ -40,7 +43,9 @@ commande:
 decl_args:
 	| EPSILON {Epsilon}
 	| VAR {Dec_args($1::[])}
-	| VAR COMMA decl_args {let Dec_args(l)=$3 in Dec_args($1::l)}
+	| VAR COMMA decl_args { match $3 with
+    		| Epsilon -> Dec_args([$1])
+    		| Dec_args(l) -> Dec_args($1::l) }
 	;
 expression:
 	expression PLUS expression 	{ Plus($1,$3) }
@@ -74,5 +79,7 @@ expression:
 arguments: 
 	| EPSILON {Epsilon}
 	| expression {Call_args ($1::[])}
-	| expression COMMA arguments {let Call_args(l)=$3 in Call_args($1::l)}
+	| expression COMMA arguments {  match $3 with
+    				| Epsilon -> Call_args([$1])
+    				| Call_args(l) -> Call_args($1::l)}
 	;
