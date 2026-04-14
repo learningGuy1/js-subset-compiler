@@ -85,7 +85,7 @@ and code_com com = let cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in
 	| IfThenElse (cond, den, els) -> (code_expr cond ^ cast_bo ^
 										"ConJmp " ^ (string_of_int ((com_length den)+ 1) ) ^ "\n" ^
 										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ "\n" ^code_com els )
-	| While (cond, com) ->  code_expr cond ^ cast_bo ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com ^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2)) ^ "\n"
+	| While (cond, com) ->  code_expr cond ^ cast_bo ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com ^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 4)) ^ "\n"
 	| DoWhile (com, cond) -> code_com com ^ code_expr cond ^ cast_bo ^ "Not\nConJmp " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 4)) ^ "\n"
 
 and opti_expr expr = match expr with
