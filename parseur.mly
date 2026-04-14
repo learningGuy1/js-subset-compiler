@@ -1,4 +1,4 @@
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL EPSILON
 
 %left ASSIGN ET
 %left EQ
@@ -26,7 +26,7 @@ commande:
 	| RETURN expression EOCOMMAND {}
 	;
 decl_args:
-	| /*epsilon*/{}
+	| {}
 	| VAR {}
 	| VAR COMMA decl_args {}
 	;
@@ -52,7 +52,7 @@ expression:
 	
 	;
 arguments: 
-	| /*epsilon*/{}
+	| {}
 	| expression {}
 	| expression COMMA arguments {}
 	;

@@ -54,23 +54,22 @@ rule token = parse
 	(*BOOLEENS*)
 	| "true"|"false" 
 		{ BOOLEAN }
+	| '='
+		{ ASSIGN }
+	| '<'
+		{ LO }
+	| '>'
+		{ GR }
 	| "=="
 		{ EQ }
 	| ">="
 		{ GREQ }
-	| '>'
-		{ GR }
 	| "<="
 		{ LOEQ }
-	| '<'
-		{ LO }
 	| '!'
 		{ NOT }
 	| "&&"
 		{ ET}
-	| '='
-		{ ASSIGN }
-		
 	| ';'
 		{ EOCOMMAND }
 	| "function"
@@ -80,7 +79,8 @@ rule token = parse
 	| ","
 		{ COMMA }
 	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* 
-		{ VAR }
+		{ (*print_endline (Lexing.lexeme lexbuf);*)
+		VAR }
 	| eof
 		{ EOF }
 	| _
