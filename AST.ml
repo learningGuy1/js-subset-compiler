@@ -77,15 +77,16 @@ and code_list l = match l with
 	| [] -> ""
 	| com::q -> code_com com ^ code_list q
 
-and code_com com = match com with
+and code_com com = let cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in
+	match com with
 	| Expr e -> code_expr (opti_expr e)
 	| Block b -> code b
 	| Semicol -> ""
-	| IfThenElse (cond, den, els) -> (code_expr cond ^
-										"ConJmp " ^ (string_of_int ((com_length den)+ (com_length els) + 2) ) ^ "\n" ^
+	| IfThenElse (cond, den, els) -> (code_expr cond ^ cast_bo ^
+										"ConJmp " ^ (string_of_int ((com_length den)+ 1) ) ^ "\n" ^
 										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ "\n" ^code_com els )
-	| While (cond, com) ->  code_expr cond ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com ^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2)) ^ "\n"
-	| DoWhile (com, cond) -> code_com com ^ code_expr cond ^ "Not\nConJmp " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2)) ^ "\n"
+	| While (cond, com) ->  code_expr cond ^ cast_bo ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com ^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2)) ^ "\n"
+	| DoWhile (com, cond) -> code_com com ^ code_expr cond ^ cast_bo ^ "Not\nConJmp " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 4)) ^ "\n"
 
 and opti_expr expr = match expr with
 	Plus (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
@@ -120,7 +121,8 @@ and opti_expr expr = match expr with
 	| Var x -> expr
 	| Et (g,d) -> Et (opti_expr g, opti_expr d)
 
-and code_expr expr = match expr with
+and code_expr expr = let cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in
+	match expr with
 	Plus (g,d) -> code_expr g ^ code_expr d ^ "AddiNb\n"
 	| Moins (g,d) -> code_expr g ^ code_expr d ^ "SubiNb\n"
 	| Mult (g,d) -> code_expr g ^ code_expr d ^ "MultNb\n"
@@ -135,8 +137,9 @@ and code_expr expr = match expr with
 	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
 	| Assign (g,d) -> code_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
-	| Not f -> code_expr f ^ "Not\n"
-	| Et (g,d) -> code_expr g ^ "ConJmp " ^ (string_of_int ((expr_length d)+ 1) ) ^ "\n" ^ code_expr d  ^ "Jump 1\n" ^ "CsteBo false\n" 
+	| Not f -> code_expr f ^ cast_bo ^ "Not\n"
+	| Et (g,d) -> code_expr g ^ cast_bo ^ "ConJmp " ^ (string_of_int ((expr_length d)+ 1 + 4) ) ^ "\n" ^ code_expr d  ^ cast_bo ^ "Jump 1\n" ^ "CsteBo false\n" 
+
 
 
 (*=============== CALCUL DE LONGUEUR =================*)
@@ -148,7 +151,7 @@ and expr_length expr = match expr with
 	| Div (g,d) -> 1 + expr_length g + expr_length d
 	| Neg e -> 1 + expr_length e 
 	| Num n -> 1 
-	| Not e -> 1 + expr_length e
+	| Not e -> 1 + expr_length e + 4 (*Cast en bool*)
 	| Eq (g,d) -> 1 + expr_length g + expr_length d
 	| Greq (g,d) -> 1 + expr_length g + expr_length d
 	| Gr (g,d) -> 1 + expr_length g + expr_length d
@@ -157,7 +160,7 @@ and expr_length expr = match expr with
 	| Bool b ->  1 
 	| Assign (_,d) -> 1 + expr_length d
 	| Var x -> 1
-	| Et (g,d) -> 3 + expr_length g + expr_length d
+	| Et (g,d) -> 3 + expr_length g + expr_length d + 2*4 (*Cast en bool*)
 	
 and code_length_list l = match l with
 	| [] -> 0
@@ -167,9 +170,9 @@ and com_length com = match com with
 	| Expr e -> expr_length e
 	| Semicol -> 0
 	| Block (Prog l) -> code_length_list l
-	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2
-	| While (cond, com) -> expr_length cond + com_length com + 2
-	| DoWhile (com, cond) -> com_length com + expr_length cond + 2 
+	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2 + 4 (*Cast en bool*)
+	| While (cond, com) -> expr_length cond + com_length com + 2 + 4 (*Cast en bool*)
+	| DoWhile (com, cond) -> com_length com + expr_length cond + 2 + 4 (*Cast en bool*)
 ;;
 
 
