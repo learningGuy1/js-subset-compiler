@@ -30,13 +30,11 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
-
 	(*ACCOLADES POUR BLOC DE CODE*)
 	| '{'
 		{ OBLOCK}
 	| '}'
 		{ FBLOCK }
-	
 	(*CONDITIONNEL IF*)
 	| "if"
 		{ IF }
@@ -74,6 +72,7 @@ rule token = parse
 	
 	| "function"
 		{ FUNC }
+	
 	| "return"
 		{ RETURN }
 	| ","

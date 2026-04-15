@@ -11,7 +11,6 @@ and commande_a =
 	| Return of expression_a
 and decl_args =
 	 Dec_args of string list
-	| Epsilon
 and expression_a =
 	| Plus of expression_a * expression_a
 	| Moins of expression_a * expression_a
@@ -31,7 +30,6 @@ and expression_a =
 	| Et of expression_a * expression_a
 	| FCall of string * call_arguments_a
 and call_arguments_a =
-	| Epsilon 
 	| Call_args of expression_a list
 ;;
 
@@ -61,7 +59,7 @@ and print_commande form com = match com with
     	print_commande fcode
     | Return a -> Format.fprintf form "Return(%a)" print_expr a
 and print_param form param = match param with
-	| Epsilon -> Format.fprintf form ""
+
 	| Dec_args l -> match l with 
 		| []  -> Format.fprintf form ""
 		| [la] -> Format.fprintf form "%s" la
@@ -85,8 +83,7 @@ and print_expr form expr = match expr with
 	| Et (g,d) -> print_binaire form "&&" g d
 	| FCall(f,expr_args) -> Format.fprintf form "%s(%a)" f print_Call_args expr_args
 and print_Call_args form expr_args = match expr_args with
-	|Epsilon -> Format.fprintf form ""
-	|Call_args l -> match l with
+	Call_args l -> match l with
 		| [] -> Format.fprintf form ""
 		| [a] -> Format.fprintf form "%a" print_expr a
 		| a::ll -> Format.fprintf form "%a,%a" print_expr a print_Call_args (Call_args ll)

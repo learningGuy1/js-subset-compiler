@@ -1,5 +1,8 @@
 %{
   open AST
+   let print_args l =
+    List.iter (fun a -> Printf.printf "arg: %s\n" a) l;
+    flush stdout
 %}
 
 %token <float> NUMBER
@@ -41,11 +44,9 @@ commande:
 	| RETURN expression EOCOMMAND {Return($2)}
 	;
 decl_args:
-	| EPSILON {Epsilon}
+	| {Dec_args([])}
 	| VAR {Dec_args($1::[])}
-	| VAR COMMA decl_args { match $3 with
-    		| Epsilon -> Dec_args([$1])
-    		| Dec_args(l) -> Dec_args($1::l) }
+	| VAR COMMA decl_args { let Dec_args(l) = $3 in Dec_args($1::l) }
 	;
 expression:
 	expression PLUS expression 	{ Plus($1,$3) }
@@ -77,9 +78,7 @@ expression:
 	| VAR GPAREN arguments DPAREN{ FCall($1,$3)}
 	;
 arguments: 
-	| EPSILON {Epsilon}
+	|  {Call_args([])}
 	| expression {Call_args ($1::[])}
-	| expression COMMA arguments {  match $3 with
-    				| Epsilon -> Call_args([$1])
-    				| Call_args(l) -> Call_args($1::l)}
+	| expression COMMA arguments { let Call_args(l) =$3 in Call_args($1::l)}
 	;
