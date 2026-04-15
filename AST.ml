@@ -77,14 +77,15 @@ and code_list l = match l with
 	| [] -> ""
 	| com::q -> code_com com ^ code_list q
 
-and code_com com = let cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in
+and code_com com = 
+	let cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in
 	match com with
 	| Expr e -> code_expr (opti_expr e)
 	| Block b -> code b
 	| Semicol -> ""
 	| IfThenElse (cond, den, els) -> (code_expr cond ^ cast_bo ^
 										"ConJmp " ^ (string_of_int ((com_length den)+ 1) ) ^ "\n" ^
-										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ "\n" ^code_com els )
+										code_com den ^ "Jump " ^ (string_of_int (com_length els) ) ^ "\n" ^code_com els )
 	| While (cond, com) ->  code_expr cond ^ cast_bo ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com ^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 4)) ^ "\n"
 	| DoWhile (com, cond) -> code_com com ^ code_expr cond ^ cast_bo ^ "Not\nConJmp " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 4)) ^ "\n"
 
@@ -121,19 +122,21 @@ and opti_expr expr = match expr with
 	| Var x -> expr
 	| Et (g,d) -> Et (opti_expr g, opti_expr d)
 
-and code_expr expr = let cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in
+and code_expr expr =
+	let cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n"
+	and cast_nb = "TypeOf\nCases\nBoToNb\n" in
 	match expr with
-	Plus (g,d) -> code_expr g ^ code_expr d ^ "AddiNb\n"
-	| Moins (g,d) -> code_expr g ^ code_expr d ^ "SubiNb\n"
-	| Mult (g,d) -> code_expr g ^ code_expr d ^ "MultNb\n"
-	| Div (g,d) -> code_expr g ^ code_expr d ^ "DiviNb\n"
-	| Neg e -> code_expr e ^ "NegaNb\n"
+	Plus (g,d) -> code_expr g ^ cast_nb ^ code_expr d ^ cast_nb ^ "AddiNb\n"
+	| Moins (g,d) -> code_expr g ^ cast_nb ^ code_expr d ^ cast_nb ^ "SubiNb\n"
+	| Mult (g,d) -> code_expr g ^ cast_nb ^ code_expr d ^ cast_nb ^ "MultNb\n"
+	| Div (g,d) -> code_expr g ^ cast_nb ^ code_expr d ^ cast_nb ^ "DiviNb\n"
+	| Neg e -> code_expr e ^ cast_nb ^ "NegaNb\n"
 	| Num n -> "CstNb " ^ (string_of_float n) ^ "\n"
 	| Eq (g,d) -> code_expr g ^ code_expr d ^ "Equals\n"
-	| Greq (g,d) -> code_expr g ^ code_expr d ^ "GrEqNb\n"
-	| Gr (g,d) -> code_expr g ^ code_expr d ^ "GrStNb\n"
-	| Loeq (g,d) -> code_expr g ^ code_expr d ^ "LoEqNb\n"
-	| Lo (g,d) -> code_expr g ^ code_expr d ^ "LoStNb\n" 
+	| Greq (g,d) -> code_expr g ^ cast_nb ^ code_expr d ^ cast_nb ^ "GrEqNb\n"
+	| Gr (g,d) -> code_expr g ^ cast_nb ^ code_expr d ^ cast_nb ^ "GrStNb\n"
+	| Loeq (g,d) -> code_expr g ^ cast_nb ^ code_expr d ^ cast_nb ^ "LoEqNb\n"
+	| Lo (g,d) -> code_expr g ^ cast_nb ^ code_expr d ^ cast_nb ^ "LoStNb\n" 
 	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
 	| Assign (g,d) -> code_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
@@ -145,18 +148,18 @@ and code_expr expr = let cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in
 (*=============== CALCUL DE LONGUEUR =================*)
 
 and expr_length expr = match expr with
-	| Plus (g,d) -> 1 + expr_length g + expr_length d
-	| Moins (g,d) -> 1 + expr_length g + expr_length d
-	| Mult (g,d) -> 1 + expr_length g + expr_length d
-	| Div (g,d) -> 1 + expr_length g + expr_length d
-	| Neg e -> 1 + expr_length e 
+	| Plus (g,d) -> 1 + expr_length g + expr_length d + 3*2 (*Cast en nb*)
+	| Moins (g,d) -> 1 + expr_length g + expr_length d + 3*2 (*Cast en nb*)
+	| Mult (g,d) -> 1 + expr_length g + expr_length d + 3*2 (*Cast en nb*)
+	| Div (g,d) -> 1 + expr_length g + expr_length d + 3*2 (*Cast en nb*)
+	| Neg e -> 1 + expr_length e + 3 (*Cast en nb*)
 	| Num n -> 1 
 	| Not e -> 1 + expr_length e + 4 (*Cast en bool*)
 	| Eq (g,d) -> 1 + expr_length g + expr_length d
-	| Greq (g,d) -> 1 + expr_length g + expr_length d
-	| Gr (g,d) -> 1 + expr_length g + expr_length d
-	| Loeq (g,d) -> 1 + expr_length g + expr_length d
-	| Lo (g,d) -> 1 + expr_length g + expr_length d
+	| Greq (g,d) -> 1 + expr_length g + expr_length d + 3*2 (*Cast en nb*)
+	| Gr (g,d) -> 1 + expr_length g + expr_length d + 3*2 (*Cast en nb*)
+	| Loeq (g,d) -> 1 + expr_length g + expr_length d + 3*2 (*Cast en nb*)
+	| Lo (g,d) -> 1 + expr_length g + expr_length d + 3*2 (*Cast en nb*)
 	| Bool b ->  1 
 	| Assign (_,d) -> 1 + expr_length d
 	| Var x -> 1
@@ -167,12 +170,12 @@ and code_length_list l = match l with
 	| c::q -> com_length c + code_length_list q	
 
 and com_length com = match com with
-	| Expr e -> expr_length e
+	| Expr e -> expr_length (opti_expr e)
 	| Semicol -> 0
 	| Block (Prog l) -> code_length_list l
-	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2 + 4 (*Cast en bool*)
-	| While (cond, com) -> expr_length cond + com_length com + 2 + 4 (*Cast en bool*)
-	| DoWhile (com, cond) -> com_length com + expr_length cond + 2 + 4 (*Cast en bool*)
+	| IfThenElse (cond, den, els) -> expr_length (opti_expr cond) + com_length den + com_length els + 2 + 4 (*Cast en bool*)
+	| While (cond, com) -> expr_length (opti_expr cond) + com_length com + 2 + 4 (*Cast en bool*)
+	| DoWhile (com, cond) -> com_length com + expr_length (opti_expr cond) + 2 + 4 (*Cast en bool*)
 ;;
 
 
