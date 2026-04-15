@@ -1,4 +1,4 @@
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL EPSILON
 
 %right ASSIGN
 %left ET
@@ -6,7 +6,7 @@
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
 %left TIMES DIV		
-%nonassoc NOT UMINUS 	
+%nonassoc NOT UMINUS
 
 %type <unit> main commande expression	
 %start main 
@@ -23,6 +23,13 @@ commande:
 	| IF GPAREN expression DPAREN commande ELSE commande {} 
 	| WHILE GPAREN expression DPAREN commande {}
 	| DO commande WHILE GPAREN expression DPAREN {}
+	| FUNC VAR GPAREN decl_args DPAREN commande {}
+	| RETURN expression EOCOMMAND {}
+	;
+decl_args:
+	| {}
+	| VAR {}
+	| VAR COMMA decl_args {}
 	;
 expression:
 	expression PLUS expression {}
@@ -41,5 +48,12 @@ expression:
 	| BOOLEAN {}
 	| VAR ASSIGN expression {}
 	| VAR {}
+	| expression ASSIGN expression {}
 	| expression ET expression {}
+	| VAR GPAREN arguments DPAREN{}
+	;
+arguments: 
+	| {}
+	| expression {}
+	| expression COMMA arguments {}
 	;
