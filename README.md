@@ -21,9 +21,7 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: p4.0/p4.1/p4.2/p4.3)***
-- Début de typage dynamique: cast automatique en booléen dans les opérateurs booléens
-
-## Problèmes fixés
-
-- Fix du calcul du ConJump dans le code du IfThenElse qui sautait jusque-là aussi le else
+***Version actuelle: c6.1)***
+- Version du projet implémentant le fragment 6.1 concernant les casts implicites arithmétiques, de type BoToNb
+- Remplacement du fichier test *test_type_dynamique* par *test_type_dynamique1*
+- Ajout du fichier test *test_type_dynamique2*
