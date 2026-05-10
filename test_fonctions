@@ -1,0 +1,20 @@
+
+function f0(){
+    function f1(x) {
+    return x ;
+}
+function f2(x, y) {
+    return x + y;
+}
+
+
+function f3(a, b, c) {
+    return (a * b) + c;
+}
+x=3;
+return f2((2+18)*18,2*(37+15))+f1(x);
+}
+
+
+
+

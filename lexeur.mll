@@ -28,13 +28,11 @@ rule token = parse
 		{ GPAREN }
 	| ')'
 		{ DPAREN }
-
 	(*ACCOLADES POUR BLOC DE CODE*)
 	| '{'
 		{ OBLOCK}
 	| '}'
 		{ FBLOCK }
-	
 	(*CONDITIONNEL IF*)
 	| "if"
 		{ IF }
@@ -69,17 +67,16 @@ rule token = parse
 		
 	| ';'
 		{ EOCOMMAND }
-	| "if"
-		{ IF }
-	| "else"
-		{ ELSE }
 	
+	| "function"
+		{ FUNC }
 	
-	(* Et logique *)
-	| "&&"
-		{ ET}	
-	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*  as lexem
-		{ VAR(lexem) }
+	| "return"
+		{ RETURN }
+	| ","
+		{ COMMA }
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* as lexem
+		{ VAR(lexem)}
 	| eof
 		{ EOF }
 	| _
