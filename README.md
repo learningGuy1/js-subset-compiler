@@ -21,11 +21,14 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: p4.0/p4.1/p4.2/p4.3)***
-- Version du parseur concernant le fragment 4 entier. Le tag p4.3 est utilisé par souci de lisibilité des versions.
+***Version actuelle: c5.0/c5.1***
+- Version du projet concernant les fragments 5.0 et 5.1
 - Répartition du travail:
-	- Edwin KAMTO: Fragment 4.0 ( _opérateur &&_ ), Fragment 4.1 ( _Ifthenelse_ ), Fragment 4.3 ( _Groupage d'instructions_ )
-	- Nino BERNARD: Fragment 4.2 (_do_while__) + _while_
-- Ajout de fichiers tests *test_et*, *test_if* et *test_while*
-- Modification de *test_var* pour tester l'associativité
-- Suppression de l'instruction *Halt* optionnelle en attendant de trouver comment garder sa génération
+	- Edwin KAMTO: Fragment 5.0 ( CALL ), Fragment 5.1 (déclaration de fonctions)
+	- Nino BERNARD: Debug et repositionnement des déclarations dans le code assembleur
+	
+- Ajout de fichiers test *test_fonctions1* et *test_fonctions2*
+
+
+## Problèmes fixés
+- Fix du calcul du offset pour le IfThenElse qui calculait la taille du code else deux fois au lieu de calculer celui du then

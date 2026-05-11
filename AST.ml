@@ -98,19 +98,21 @@ let rec code prog = match prog with
 	
 and code_list l = match l with
 	| [] -> ""
-	| com::q -> code_com com ^ code_list q
+	| com::q -> (match com with
+							|Function (f,param,fcode) -> "NewClot func_" ^ f ^ "\n" ^(func_param f param) ^ code_list q ^ "func_"^f^":\n" ^code_com fcode
+							|_ -> code_com com ^ code_list q)
 	
 and code_com com = match com with
 	| Expr e -> code_expr (opti_expr e)
 	| Block b -> code b
 	| Semicol -> ""
 	| IfThenElse (cond, den, els) -> (code_expr cond ^
-										"ConJmp " ^ (string_of_int ((com_length els) + 1) ) ^ "\n" ^
+										"ConJmp " ^ (string_of_int ((com_length den) + 1) ) ^ "\n" ^
 										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ "\n" ^code_com els )
 	| While (cond, com) ->  code_expr cond ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com ^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2)) ^ "\n"
 	| DoWhile (com, cond) -> code_com com ^ code_expr cond ^ "Not\nConJmp " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2)) ^ "\n"
 	| Function (f,param,fcode) -> "NewClot func_" ^ f ^ "\n" ^(func_param f param) ^"func_"^f^":\n" ^code_com fcode
-    | Return a -> code_expr a ^ "Return\n"
+  | Return a -> code_expr a ^ "Return\n"
 and func_param f args =
 	match args with
 	| Dec_args l ->
@@ -197,18 +199,14 @@ and expr_length expr = match expr with
 	| Assign (_,d) -> 1 + expr_length d
 	| Var x -> 1
 	| Et (g,d) -> 3 + expr_length g + expr_length d
-	| FCall (_,args) -> call_args_length args + 2
+	| FCall (_,args) -> (let Call_args l = args in call_args_length l + List.length l + 3)
 and code_length_list l = match l with
 	| [] -> 0
 	| c::q -> com_length c + code_length_list q	
-and call_args_length args =
-	match args with
-	| Call_args l -> call_args_length_list l
-
-and call_args_length_list l =
+and call_args_length l =
 	match l with
 	| [] -> 0
-	| a::q -> expr_length a + 1 + call_args_length_list q
+	| x::ll -> expr_length x + call_args_length ll
 and com_length com = match com with
 	| Expr e -> expr_length e
 	| Semicol -> 0
@@ -216,7 +214,7 @@ and com_length com = match com with
 	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2
 	| While (cond, com) -> expr_length cond + com_length com + 2
 	| DoWhile (com, cond) -> com_length com + expr_length cond + 2 
-	| Function (_, _, body) -> com_length body + 1
+	| Function (_,param,fcode) ->  (let Dec_args l = param in 2 + List.length l + com_length fcode)
 	| Return a -> expr_length a + 1
 ;;
 
