@@ -46,6 +46,7 @@ expression:
 	| expression LO expression {}
 	| NOT expression %prec NOT {}
 	| BOOLEAN {}
+	| UNDEFINED {}
 	| VAR ASSIGN expression {}
 	| VAR {}
 	| expression ASSIGN expression {}
