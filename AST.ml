@@ -25,6 +25,7 @@ and expression_a =
 	| Lo of expression_a * expression_a
 	| Not of expression_a
 	| Bool of bool
+	| Undefined
 	| Assign of string * expression_a
 	| Var of string
 	| Et of expression_a * expression_a
@@ -78,6 +79,7 @@ and print_expr form expr = match expr with
 	| Lo (g,d) -> print_binaire form "<" g d
 	| Not f -> Format.fprintf form "%s %a" "!" print_expr f
 	| Bool b -> Format.fprintf form "Bool[%b]" b
+	| Undefined -> Format.fprintf form "undefined"
 	| Assign (g,d) -> Format.fprintf form "=(Var[%s], %a)" g print_expr d
 	| Var x -> Format.fprintf form "Var[%s]" x
 	| Et (g,d) -> print_binaire form "&&" g d
