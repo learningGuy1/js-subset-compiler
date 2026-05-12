@@ -21,9 +21,14 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: c6.0/c6.1***
-- Version du projet implémentant les sous-fragments 6.0 (casts implicites NbToBo) et 6.1 (casts implicites BoToNb)
+***Version actuelle: c6.2***
+- Version du parseur concernant le sous-fragment 6.2 (undefined)
 - Répartition du travail:
-	- Nino BERNARD: Intégralité des fragments.
-- Ajout des fichiers test *test_type_dynamique1* et *test_type_dynamique2*
+	- Nino BERNARD: Intégralité du sous-fragment.
+- Un conflit shift/reduce est présent entre les variables et Undefined. Il est résolu arbitrairement en modifiant l'ordre des règles de lexing de sorte à prioriser undefined.
+- Ajout du fichier test *test_undefined*
+- Ajout des fichiers tests *test_fonctions1*, *test_fonctions2*, *test_fonctions2*, *test_opti*, *test_type_dynamique1* et *test_type dynamique2* jusque-là absents de la branche parser.
 
+## Problèmes fixés
+
+- Suppression d'un token inutilisé (EPSILON)

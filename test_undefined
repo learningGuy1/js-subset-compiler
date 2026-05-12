@@ -1,0 +1,12 @@
+undefined;
+function f(){return undefined;}
+
+f; //Doit empiler undefined
+
+x=undefined;
+x+2; //Doit faire une erreur
+2+x; //Doit faire une erreur
+
+true&&undefined; //Doit empiler undefined
+undefined&&false; //Doit empiler undefined
+!undefined; //Doit empiler undefined
