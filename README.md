@@ -23,10 +23,11 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ***Version actuelle: p6.2***
 - Version du parseur concernant le sous-fragment 6.2 (undefined)
+- Prend également en compte les changements du Fragment 5 (fonctions) qui ont par erreur été effectués dans parser_work
 - Répartition du travail:
 	- Nino BERNARD: Intégralité du sous-fragment.
 - Ajout du fichier test test_undefined
 
 ## Problèmes fixés
 
-- Suprression d'un token inutilisé (EPSILON)
+- Suppression d'un token inutilisé (EPSILON)
