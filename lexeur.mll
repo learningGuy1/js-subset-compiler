@@ -50,23 +50,22 @@ rule token = parse
 	(*BOOLEENS*)
 	| "true"|"false" as lexem
 		{ BOOLEAN(bool_of_string lexem) }
+	| '='
+		{ ASSIGN }
+	| '<'
+		{ LO }
+	| '>'
+		{ GR }
 	| "=="
 		{ EQ }
 	| ">="
 		{ GREQ }
-	| '>'
-		{ GR }
 	| "<="
 		{ LOEQ }
-	| '<'
-		{ LO }
 	| '!'
 		{ NOT }
 	| "&&"
 		{ ET}
-	| '='
-		{ ASSIGN }
-		
 	| ';'
 		{ EOCOMMAND }
 	
@@ -79,6 +78,8 @@ rule token = parse
 		{ COMMA }
 	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* as lexem
 		{ VAR(lexem)}
+	| "undefined"
+		{ UNDEFINED }
 	| eof
 		{ EOF }
 	| _
