@@ -1,0 +1,9 @@
+1+true;
+5*(7+true)/(1+false);
+if(1>=true && false<1){
+	y = -false;
+}else{
+	x = false<=true;
+	y = true<3;
+}
+
