@@ -78,11 +78,10 @@ rule token = parse
 		{ RETURN }
 	| ","
 		{ COMMA }
-	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* 
-		{ (*print_endline (Lexing.lexeme lexbuf);*)
-		VAR }
 	| "undefined"
 		{ UNDEFINED }
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*
+		{ VAR }
 	| eof
 		{ EOF }
 	| _
