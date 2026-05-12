@@ -21,11 +21,12 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-- Version du parseur concernant le fragment 4 entier
+***Version actuelle: p6.2***
+- Version du parseur concernant le sous-fragment 6.2 (undefined)
 - Répartition du travail:
-	- Edwin KAMTO: Fragment 4.0 ( _opérateur &&_ ), Fragment 4.1 ( _Ifthenelse_ ), Fragment 4.3 ( _Groupage d'instructions_ )
-	- Nino BERNARD: Fragment 4.2 (_do_while__) + _while_
-- Ajout de fichiers tests *test_et*, *test_if* et *test_while*
-- Ajout de reconnaissance de syntaxe de fonction ( appel, declaration de fonction)
-- modification de la grammaire du non terminal main 
+	- Nino BERNARD: Intégralité du sous-fragment.
+- Ajout du fichier test test_undefined
 
+## Problèmes fixés
+
+- Suprression d'un token inutilisé (EPSILON)

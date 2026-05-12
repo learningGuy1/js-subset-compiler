@@ -81,6 +81,8 @@ rule token = parse
 	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* 
 		{ (*print_endline (Lexing.lexeme lexbuf);*)
 		VAR }
+	| "undefined"
+		{ UNDEFINED }
 	| eof
 		{ EOF }
 	| _
