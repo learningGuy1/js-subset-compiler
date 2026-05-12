@@ -1,6 +1,7 @@
 %token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL UNDEFINED
 
-%left ASSIGN ET
+%right ASSIGN
+%left ET
 %left EQ
 %left GREQ LOEQ GR LO
 %left PLUS MINUS 	
@@ -45,11 +46,11 @@ expression:
 	| expression LO expression {}
 	| NOT expression %prec NOT {}
 	| BOOLEAN {}
+	| VAR ASSIGN expression {}
+	| VAR {}
 	| expression ASSIGN expression {}
 	| expression ET expression {}
 	| VAR GPAREN arguments DPAREN{}
-	| VAR {}
-	
 	;
 arguments: 
 	| {}
