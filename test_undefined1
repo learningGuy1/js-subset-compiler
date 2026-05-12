@@ -1,3 +1,0 @@
-do{
-	y=0;
-}while(undefined&&true);
