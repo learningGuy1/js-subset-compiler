@@ -1,9 +1,25 @@
 undefined;
 function f(){return undefined;}
 
-f; //Doit empiler undefined
+f(); //Doit empiler undefined
 
 x=undefined;
+
+while(x){
+	x=1; //ne doit pas avoir lieu
+}
+
+y=0;
+do{
+	y=y+1; 
+}while(x&&true); //y doit valoir 1 après cette boucle
+
+if(!x){
+	y=x; //doit avoir lieu
+}else{ 
+	x=1; //ne doit pas avoir lieu
+}
+
 x+2; //Doit faire une erreur
 2+x; //Doit faire une erreur
 
