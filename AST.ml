@@ -25,6 +25,7 @@ and expression_a =
 	| Lo of expression_a * expression_a
 	| Not of expression_a
 	| Bool of bool
+	| Undefined
 	| Assign of string * expression_a
 	| Var of string
 	| Et of expression_a * expression_a
@@ -78,6 +79,7 @@ and print_expr form expr = match expr with
 	| Lo (g,d) -> print_binaire form "<" g d
 	| Not f -> Format.fprintf form "%s %a" "!" print_expr f
 	| Bool b -> Format.fprintf form "Bool[%b]" b
+	| Undefined -> Format.fprintf form "undefined"
 	| Assign (g,d) -> Format.fprintf form "=(Var[%s], %a)" g print_expr d
 	| Var x -> Format.fprintf form "Var[%s]" x
 	| Et (g,d) -> print_binaire form "&&" g d
@@ -103,8 +105,8 @@ and code_list l = match l with
 							|_ -> code_com com ^ code_list q)
 	
 and code_com com = 
-	let check_not_func = "TypeOf\nCstNb 5\nEquals\nConJmp 1\nError\n" 
-	and cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in match com with
+	let check_not_func = "TypeOf\nCstNb 5\nEquals\nConJmp 1\nError\n"
+	and cast_bo = "TypeOf\nCases 2\nJump 7\nNoop\nNbToBo\nJump 4\nNoop\nNoop\nDrop\nCsteBo false\n" in match com with
 	| Expr e -> code_expr (opti_expr e)
 	| Block b -> code b
 	| Semicol -> ""
@@ -150,6 +152,7 @@ and opti_expr expr = match expr with
 	| Lo (g,d) -> Lo (opti_expr g, opti_expr d)
 	| Not f -> Not (opti_expr f)
 	| Bool b -> expr
+	| Undefined -> expr
 	| Assign (g,d) -> Assign(g, opti_expr d)
 	| Var x -> expr
 	| Et (g,d) -> Et (opti_expr g, opti_expr d)
@@ -159,24 +162,26 @@ and opti_call_args args =
 	| Call_args l -> Call_args (List.map opti_expr l)
 and code_expr expr = 
 	let check_not_func = "TypeOf\nCstNb 5\nEquals\nConJmp 1\nError\n" 
-	and cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n"
+	and check_not_undef = "TypeOf\nCstNb 3\nEquals\nConJmp 1\nError\n" 
+	and cast_bo = "TypeOf\nCases 2\nJump 7\nNoop\nNbToBo\nJump 4\nNoop\nNoop\nDrop\nCsteBo false\n" 
 	and cast_nb = "TypeOf\nCases\nBoToNb\n" in match expr with
-	Plus (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "AddiNb\n"
-	| Moins (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "SubiNb\n"
-	| Mult (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "MultNb\n"
-	| Div (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "DiviNb\n"
-	| Neg e -> code_expr e ^ check_not_func ^ cast_nb ^ "NegaNb\n"
+	Plus (g,d) -> code_expr g ^ check_not_func ^ check_not_undef ^ cast_nb ^ code_expr d ^ check_not_func ^ check_not_undef ^ cast_nb ^ "AddiNb\n"
+	| Moins (g,d) -> code_expr g ^ check_not_func ^ check_not_undef ^ cast_nb ^ code_expr d ^ check_not_func ^ check_not_undef ^ cast_nb ^ "SubiNb\n"
+	| Mult (g,d) -> code_expr g ^ check_not_func ^ check_not_undef ^ cast_nb ^ code_expr d ^ check_not_func ^ check_not_undef ^ cast_nb ^ "MultNb\n"
+	| Div (g,d) -> code_expr g ^ check_not_func ^ check_not_undef ^ cast_nb ^ code_expr d ^ check_not_func ^ check_not_undef ^ cast_nb ^ "DiviNb\n"
+	| Neg e -> code_expr e ^ check_not_func ^ check_not_undef ^ cast_nb ^ "NegaNb\n"
 	| Num n -> "CstNb " ^ (string_of_float n) ^ "\n"
 	| Eq (g,d) -> code_expr g ^ check_not_func ^ code_expr d ^ check_not_func ^ "Equals\n"
-	| Greq (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "GrEqNb\n"
-	| Gr (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "GrStNb\n"
-	| Loeq (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "LoEqNb\n"
-	| Lo (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "LoStNb\n" 
+	| Greq (g,d) -> code_expr g ^ check_not_func ^ check_not_undef ^ cast_nb ^ code_expr d ^ check_not_func ^ check_not_undef ^ cast_nb ^ "GrEqNb\n"
+	| Gr (g,d) -> code_expr g ^ check_not_func ^ check_not_undef ^ cast_nb ^ code_expr d ^ check_not_func ^ check_not_undef ^ cast_nb ^ "GrStNb\n"
+	| Loeq (g,d) -> code_expr g ^ check_not_func ^ check_not_undef ^ cast_nb ^ code_expr d ^ check_not_func ^ check_not_undef ^ cast_nb ^ "LoEqNb\n"
+	| Lo (g,d) -> code_expr g ^ check_not_func ^ check_not_undef ^ cast_nb ^ code_expr d ^ check_not_func ^ check_not_undef ^ cast_nb ^ "LoStNb\n" 
 	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
+	| Undefined -> "CsteUn\n"
 	| Assign (g,d) -> code_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
 	| Not f -> code_expr f ^ check_not_func ^ cast_bo ^ "Not\n"
-	| Et (g,d) -> code_expr g ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((expr_length d) + 5 (*check fonction*) + 4 (*Cast en bool*) + 1) ) ^ "\n" ^ code_expr d ^ check_not_func ^ cast_bo ^ "Jump 1\n" ^ "CsteBo false\n" 
+	| Et (g,d) -> code_expr g ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((expr_length d) + 5 (*check fonction*) + 10 (*Cast en bool*) + 1) ) ^ "\n" ^ code_expr d ^ check_not_func ^ cast_bo ^ "Jump 1\n" ^ "CsteBo false\n" 
 	| FCall (f,args) ->"GetVar " ^ f ^ "\n" ^"StCall\n" ^code_call_args args ^"Call\n"
 and code_call_args args =
 	match args with
@@ -189,22 +194,23 @@ and code_call_args_list l =
 (*=============== CALCUL DE LONGUEUR =================*)
 
 and expr_length expr = match expr with
-	| Plus (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
-	| Moins (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
-	| Mult (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
-	| Div (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
-	| Neg e -> 1 + expr_length e  + 5 (*check fonction*) + 3 (*Cast en nb*)
+	| Plus (g,d) -> 1 + expr_length g + expr_length d + 4*5 (*check fonction et undefined*) + 3*2 (*Cast en nb*)
+	| Moins (g,d) -> 1 + expr_length g + expr_length d + 4*5 (*check fonction et undefined*) + 3*2 (*Cast en nb*)
+	| Mult (g,d) -> 1 + expr_length g + expr_length d + 4*5 (*check fonction et undefined*) + 3*2 (*Cast en nb*)
+	| Div (g,d) -> 1 + expr_length g + expr_length d + 4*5 (*check fonction et undefined*) + 3*2 (*Cast en nb*)
+	| Neg e -> 1 + expr_length e  + 2*5 (*check fonction et undefined*) + 3 (*Cast en nb*)
 	| Num n -> 1 
-	| Not e -> 1 + expr_length e + 5 (*check fonction*) + 4 (*Cast en bool*)
+	| Not e -> 1 + expr_length e + 5 (*check fonction*) + 10 (*Cast en bool*)
 	| Eq (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*)
-	| Greq (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
-	| Gr (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
-	| Loeq (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
-	| Lo (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
+	| Greq (g,d) -> 1 + expr_length g + expr_length d + 4*5 (*check fonction et undefined*) + 3*2 (*Cast en nb*)
+	| Gr (g,d) -> 1 + expr_length g + expr_length d + 4*5 (*check fonction et undefined*) + 3*2 (*Cast en nb*)
+	| Loeq (g,d) -> 1 + expr_length g + expr_length d + 4*5 (*check fonction et undefined*) + 3*2 (*Cast en nb*)
+	| Lo (g,d) -> 1 + expr_length g + expr_length d + 4*5 (*check fonction et undefined*) + 3*2 (*Cast en nb*)
 	| Bool b ->  1 
+	| Undefined -> 1
 	| Assign (_,d) -> 1 + expr_length d
 	| Var x -> 1
-	| Et (g,d) -> 3 + expr_length g + expr_length d + 2*5 (*check fonction*) + 2*4 (*Cast en bool*)
+	| Et (g,d) -> 3 + expr_length g + expr_length d + 2*5 (*check fonction*) + 2*10 (*Cast en bool*)
 	| FCall (_,args) -> (let Call_args l = args in call_args_length l + List.length l + 3)
 and code_length_list l = match l with
 	| [] -> 0
@@ -217,9 +223,9 @@ and com_length com = match com with
 	| Expr e -> expr_length (opti_expr e)
 	| Semicol -> 0
 	| Block (Prog l) -> code_length_list l
-	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2 + 5 (*check fonction*) + 4 (*Cast en bool*)
-	| While (cond, com) -> expr_length cond + com_length com + 2 + 5 (*check fonction*) + 4 (*Cast en bool*)
-	| DoWhile (com, cond) -> com_length com + expr_length cond + 2 + 5 (*check fonction*) + 4 (*Cast en bool*)
+	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2 + 5 (*check fonction*) + 10 (*Cast en bool*)
+	| While (cond, com) -> expr_length cond + com_length com + 2 + 5 (*check fonction*) + 10 (*Cast en bool*)
+	| DoWhile (com, cond) -> com_length com + expr_length cond + 2 + 5 (*check fonction*) + 10 (*Cast en bool*)
 	| Function (_,param,fcode) ->  (let Dec_args l = param in 2 + List.length l + com_length fcode)
 	| Return a -> expr_length a + 1
 ;;
