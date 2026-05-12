@@ -21,14 +21,9 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: c5.0/c5.1***
-- Version du projet concernant les fragments 5.0 et 5.1
+***Version actuelle: c5.2***
+- Version du projet concernant le sous-fragment 5.2 (Cas d'erreur lors d'utilisation de fonctions)
+- **NOTE:** l'instruction TypeOf a ici été utilisée, bien que seulement autorisée au fragment suivant, à défaut d'avoir trouvé un moyen de la contourner
 - Répartition du travail:
-	- Edwin KAMTO: Fragment 5.0 ( CALL ), Fragment 5.1 (déclaration de fonctions)
-	- Nino BERNARD: Debug et repositionnement des déclarations dans le code assembleur
-	
-- Ajout de fichiers test *test_fonctions1* et *test_fonctions2*
-
-
-## Problèmes fixés
-- Fix du calcul du offset pour le IfThenElse qui calculait la taille du code else deux fois au lieu de calculer celui du then
+	- Nino BERNARD: Intégralité du fragment.
+- Ajout du fichier test *test_fonctions3*
