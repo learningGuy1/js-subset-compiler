@@ -105,7 +105,7 @@ and code_list l = match l with
 							|_ -> code_com com ^ code_list q)
 	
 and code_com com = 
-	let check_not_func = "TypeOf\nCstNb 5\nEquals\nConJmp 1\nError\n" 
+	let check_not_func = "TypeOf\nCstNb 5\nEquals\nConJmp 1\nError\n"
 	and cast_bo = "TypeOf\nCases\nJump 1\nNbToBo\n" in match com with
 	| Expr e -> code_expr (opti_expr e)
 	| Block b -> code b
@@ -175,6 +175,7 @@ and code_expr expr =
 	| Loeq (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "LoEqNb\n"
 	| Lo (g,d) -> code_expr g ^ check_not_func ^ cast_nb ^ code_expr d ^ check_not_func ^ cast_nb ^ "LoStNb\n" 
 	| Bool b ->  "CsteBo " ^ (string_of_bool b) ^ "\n"
+	| Undefined -> "CsteUn\n"
 	| Assign (g,d) -> code_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
 	| Not f -> code_expr f ^ check_not_func ^ cast_bo ^ "Not\n"
@@ -204,6 +205,7 @@ and expr_length expr = match expr with
 	| Loeq (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
 	| Lo (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
 	| Bool b ->  1 
+	| Unsigned -> 1
 	| Assign (_,d) -> 1 + expr_length d
 	| Var x -> 1
 	| Et (g,d) -> 3 + expr_length g + expr_length d + 2*5 (*check fonction*) + 2*4 (*Cast en bool*)
