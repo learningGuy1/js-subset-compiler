@@ -21,12 +21,14 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: c5.0/c5.1)***
-- Version du projet concernant le fragment 5.0 te 5.1.
+***Version actuelle: c5.0/c5.1***
+- Version du projet concernant les fragments 5.0 et 5.1
 - Répartition du travail:
 	- Edwin KAMTO: Fragment 5.0 ( CALL ), Fragment 5.1 (déclaration de fonctions)
+	- Nino BERNARD: Debug et repositionnement des déclarations dans le code assembleur
 	
-- Ajout de fichiers test_fonctions
-- Modification de *test_var* pour tester l'associativité
-=======
+- Ajout de fichiers test *test_fonctions1* et *test_fonctions2*
 
+
+## Problèmes fixés
+- Fix du calcul du offset pour le IfThenElse qui calculait la taille du code else deux fois au lieu de calculer celui du then
