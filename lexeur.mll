@@ -76,10 +76,10 @@ rule token = parse
 		{ RETURN }
 	| ","
 		{ COMMA }
-	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* as lexem
-		{ VAR(lexem)}
 	| "undefined"
 		{ UNDEFINED }
+	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')* as lexem
+		{ VAR(lexem)}
 	| eof
 		{ EOF }
 	| _

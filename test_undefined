@@ -1,7 +1,7 @@
 undefined;
-function undefined(){return undefined;}
+function f(){return undefined;}
 
-undefined(); //Doit empiler undefined
+f; //Doit empiler undefined
 
 x=undefined;
 x+2; //Doit faire une erreur
@@ -10,7 +10,3 @@ x+2; //Doit faire une erreur
 true&&undefined; //Doit empiler undefined
 undefined&&false; //Doit empiler undefined
 !undefined; //Doit empiler undefined
-
-undefined = 2; 
-undefined(); //Doit empiler 2
-
