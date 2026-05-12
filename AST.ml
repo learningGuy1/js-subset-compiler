@@ -176,7 +176,7 @@ and code_expr expr =
 	| Assign (g,d) -> code_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
 	| Not f -> code_expr f ^ check_not_func ^ cast_bo ^ "Not\n"
-	| Et (g,d) -> code_expr g ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((expr_length d)+ 1) ) ^ "\n" ^ code_expr d ^ check_not_func ^ cast_bo ^ "Jump 1\n" ^ "CsteBo false\n" 
+	| Et (g,d) -> code_expr g ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((expr_length d) + 5 (*check fonction*) + 4 (*Cast en bool*) + 1) ) ^ "\n" ^ code_expr d ^ check_not_func ^ cast_bo ^ "Jump 1\n" ^ "CsteBo false\n" 
 	| FCall (f,args) ->"GetVar " ^ f ^ "\n" ^"StCall\n" ^code_call_args args ^"Call\n"
 and code_call_args args =
 	match args with
@@ -193,7 +193,7 @@ and expr_length expr = match expr with
 	| Moins (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
 	| Mult (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
 	| Div (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*) + 3*2 (*Cast en nb*)
-	| Neg e -> 1 + expr_length e  + 2*5 (*check fonction*) + 3 (*Cast en nb*)
+	| Neg e -> 1 + expr_length e  + 5 (*check fonction*) + 3 (*Cast en nb*)
 	| Num n -> 1 
 	| Not e -> 1 + expr_length e + 5 (*check fonction*) + 4 (*Cast en bool*)
 	| Eq (g,d) -> 1 + expr_length g + expr_length d + 2*5 (*check fonction*)
