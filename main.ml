@@ -5,6 +5,8 @@ let _ =
 		|> AST.code
 		|> Printf.fprintf (open_out Sys.argv.(2)) "%s\n%!"
 	with
+	| AST.DoubleLet var ->					(*erreur de let en double*)
+		Printf.printf "Erreur: %s est déjà un nom de variable utilisé\n" var
 	| Lexeur.TokenInconnu ->				(*erreur de lexing*)
 		Printf.printf "Erreur de lexing\n"
 	| Parsing.Parse_error ->				(*erreur de parsing*)

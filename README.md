@@ -22,11 +22,11 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 ## Changements
 
 ***Version actuelle: c7.1***
-- Version du parseur concernant le sous-fragment 7.1 (hoisting)
+- Version du parseur concernant le sous-fragment 7.1 (hoisting + interdiction d'avoir deux mêmes let dans un même bloc)
 - Répartition du travail:
 	- Nino BERNARD: Intégralité du sous-fragment.
 - Renommage du fichier_test *test_let* en *test_let1*
-- Ajout du fichier test *test_let2*
+- Ajout des fichiers tests *test_let2* et *test_let3*
 
 ## Problèmes fixés
 
