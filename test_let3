@@ -1,0 +1,18 @@
+let x;
+let y;
+function f(){
+	let x;
+	return 0;
+}
+
+let z;
+let x;
+
+function g(){
+	function f(){ return 0; }
+	function h(){ return 0; }
+	function f(){ return 0; } //à commenter pour deuxième test
+	return 0;
+}
+
+function g(x){ return 0; } // à commenter pour autre test
