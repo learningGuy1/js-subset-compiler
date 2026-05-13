@@ -3,6 +3,7 @@ type programme_a =
 and commande_a =
 	Expr of expression_a
 	| Block of programme_a
+	| Let of string
 	| IfThenElse of expression_a * commande_a* commande_a
 	| While of expression_a * commande_a
 	| DoWhile of commande_a * expression_a
@@ -43,6 +44,7 @@ let rec print_programme form prog = match prog with
 and print_commande form com = match com with
 	| Expr e -> Format.fprintf form "Exp(%a)\n" print_expr e
 	| Block c -> Format.fprintf form "Block(%a)\n" print_programme c 
+	| Let x -> Format.fprintf form "Let[%s]\n" x
 	| IfThenElse (cond,den,els) -> Format.fprintf form "IfThenElse(%a, %a, %a)\n"
       print_expr cond
       print_commande den
