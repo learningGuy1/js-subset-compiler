@@ -78,6 +78,8 @@ rule token = parse
 		{ RETURN }
 	| ","
 		{ COMMA }
+	| "let"
+		{ LET }
 	| "undefined"
 		{ UNDEFINED }
 	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*
