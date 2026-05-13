@@ -21,17 +21,13 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: c6.2***
-- Version du parseur concernant le sous-fragment 6.2 (undefined)
+***Version actuelle: p7.0***
+- Version du parseur concernant le sous-fragment 7.0 (let \_;)
 - Répartition du travail:
 	- Nino BERNARD: Intégralité du sous-fragment.
-- Un conflit shift/reduce est présent entre les variables et *undefined*. Il est résolu arbitrairement en modifiant l'ordre des règles de lexing de sorte à prioriser undefined.
-- Comportement de *undefined* dans les opérations:
-	- Erreur quand utilisé dans des opérateurs arithmétiques car NaN n'est pas autorisé en assembleur
-	- Quand utilisé avec des opérateurs booléens/là où un booléen est attendu, cast en *false*.
-- **NOTE: le choix de cast *undefined* en *false* est fait pour se rapprocher du vrai fonctionnement de JavaScript, mais nécessite en contrepartie l'utilisation de Drop qui n'est autorisé qu'au fragment 9.0**
-- Ajout des fichiers tests *test_undefined1* et *test*undefined2*
+- Un conflit shift/reduce est présent entre les variables et le mot-clé let. Il est résolu arbitrairement en modifiant l'ordre des règles de lexing de sorte à prioriser let.
+- Ajout du fichier test *test_let*
 
 ## Problèmes fixés
 
-- Suppression d'un token inutilisé (EPSILON)
+- Fix du calcul des Jump/ConJmp dans les instructions conditionnelles While et DoWhile qui ne prennaient pas en compte les check/cast. 
