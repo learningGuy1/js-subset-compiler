@@ -21,13 +21,17 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: p7.0***
-- Version du parseur concernant le sous-fragment 7.0 (let \_;)
+***Version actuelle: c7.1***
+- Version du parseur concernant le sous-fragment 7.1 (hoisting)
 - Répartition du travail:
 	- Nino BERNARD: Intégralité du sous-fragment.
-- Un conflit shift/reduce est présent entre les variables et le mot-clé let. Il est résolu arbitrairement en modifiant l'ordre des règles de lexing de sorte à prioriser let.
-- Ajout du fichier test *test_let*
+- Renommage du fichier_test *test_let* en *test_let1*
+- Ajout du fichier test *test_let2*
 
 ## Problèmes fixés
 
 - Fix du calcul des Jump/ConJmp dans les instructions conditionnelles While et DoWhile qui ne prennaient pas en compte les check/cast. 
+- Rétablissement de l'instruction Halt en fin du programme principal
+- Inversement de l'ordre des DclArg afin de respecter le fonctionnement de la mini-JSM plutôt que celui du cours
+
+**NOTE: les deux derniers points rendent chaque code assembleur obtenu après execution lançable dans la mini-JSM sans modification manuelle préalable**

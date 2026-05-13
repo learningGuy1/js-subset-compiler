@@ -1,0 +1,18 @@
+function f(x,y){
+	function g(x){
+		while(x>0){
+			let a;
+			x=x-1;
+		}
+
+		return x;
+	}
+
+	let b;
+	return g(x) + y;
+}
+
+let c;
+f(-2,f(12,2)); //Doit empiler 0
+let d;
+c=f(0,12); //c doit prendre la valeur 12

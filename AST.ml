@@ -98,36 +98,38 @@ and print_binaire form s g d =
 (* ================= CODE ET OPTIMISATION ================= *)		
 
 let rec code prog = match prog with
-	| Prog(l) -> code_list l
-	
+	| Prog(l) -> let (decvar, foncvar, program, fonc) = code_list l in decvar ^ foncvar ^ program ^ "Halt\n" ^ fonc
+
+and concat4 x y = let (a,b,c,d),(e,f,g,h) = x,y in (a^e,b^f,c^g,d^h)
+
+and condense4 x = let (a,b,c,d) = x in a^b^c^d
+
+and third4 x = let (a,b,c,d) = x in c
+
 and code_list l = match l with
-	| [] -> ""
-	| com::q -> (match com with
-							|Function (f,param,fcode) -> "NewClot func_" ^ f ^ "\n" ^(func_param f param) ^ code_list q ^ "func_"^f^":\n" ^code_com fcode
-							|_ -> code_com com ^ code_list q)
-	
+	| [] -> ("","","","")
+	| com::q -> concat4 (code_com com) (code_list q)
+
 and code_com com = 
 	let check_not_func = "TypeOf\nCstNb 5\nEquals\nConJmp 1\nError\n"
 	and cast_bo = "TypeOf\nCases 2\nJump 7\nNoop\nNbToBo\nJump 4\nNoop\nNoop\nDrop\nCsteBo false\n" in match com with
-	| Expr e -> code_expr (opti_expr e)
-	| Block b -> code b
-	| Semicol -> ""
-	| Let x -> "DclVar " ^ x ^ "\n"
-	| IfThenElse (cond, den, els) -> (code_expr cond ^ check_not_func ^ cast_bo ^
+	| Expr e -> ("", "", code_expr (opti_expr e), "")
+	| Block b -> let Prog(l) = b in ("", "", condense4 (code_list l), "") 
+	| Semicol -> ("","","","")
+	| Let x -> ("DclVar " ^ x ^ "\n", "", "", "")
+	| IfThenElse (cond, den, els) -> ("", "", code_expr cond ^ check_not_func ^ cast_bo ^
 										"ConJmp " ^ (string_of_int ((com_length den) + 1) ) ^ "\n" ^
-										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ "\n" ^code_com els )
-	| While (cond, com) ->  code_expr cond ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com 
-													^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 5 (*check fonction*) - 10 (*Cast en bool*))) ^ "\n"
-	| DoWhile (com, cond) -> code_com com ^ code_expr cond ^ check_not_func ^ cast_bo ^ "Not\nConJmp " 
-													^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 5 (*check fonction*) - 10 (*Cast en bool*))) ^ "\n"
-	| Function (f,param,fcode) -> "NewClot func_" ^ f ^ "\n" ^(func_param f param) ^"func_"^f^":\n" ^code_com fcode
-  | Return a -> code_expr a ^ "Return\n"
-and func_param f args =
-	match args with
-	| Dec_args l ->
-		(match l with
-		| [] -> "SetVar " ^ f ^ "\n"
-		| a::ll -> "DclArg " ^ a ^ "\n" ^ (func_param f (Dec_args ll)))
+										third4 (code_com den) ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ "\n" ^ third4 (code_com els),"")
+	| While (cond, com) ->  ("", "", code_expr cond ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ third4 (code_com com)
+													^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 5 (*check fonction*) - 10 (*Cast en bool*))) ^ "\n", "")
+	| DoWhile (com, cond) -> ("", "", third4 (code_com com) ^ code_expr cond ^ check_not_func ^ cast_bo ^ "Not\nConJmp " 
+													^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 5 (*check fonction*) - 10 (*Cast en bool*))) ^ "\n", "")
+	| Function (f,param,fcode) -> ("DclVar " ^ f ^ "\n", "NewClot func_" ^ f ^ "\n" ^ (func_param param) ^ "SetVar " ^ f ^ "\n", "", "func_"^f^":\n" ^ condense4 (code_com fcode))
+  | Return a -> ("", "", code_expr a ^ "Return\n", "")
+and func_param args =
+	let Dec_args(l) = args in	match l with
+		| [] -> ""
+		| a::ll -> (func_param (Dec_args ll)) ^ "DclArg " ^ a ^ "\n"
 and opti_expr expr = match expr with
 	Plus (g,d) -> (let (a,b) = (opti_expr g, opti_expr d) in
 				match (a,b) with
