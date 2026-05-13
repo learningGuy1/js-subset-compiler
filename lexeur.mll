@@ -82,6 +82,11 @@ rule token = parse
 		{ LET }
 	| "undefined"
 		{ UNDEFINED }
+	| "null"
+		{ NULL}
+	| ":" { COLUMN }
+	| "." { DOT }
+	
 	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*
 		{ VAR }
 	| eof

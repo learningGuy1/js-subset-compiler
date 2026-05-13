@@ -1,0 +1,12 @@
+obj = { 
+		nom : 10,
+		age : 25,
+		actif : true,
+		data : null
+		};
+result = obj.nom + obj.age; 
+obj.nom = obj.nom + 5;
+if(obj.actif == true){ 
+	result = obj.nom + result;
+	}else { result = 0;}	
+obj=null;

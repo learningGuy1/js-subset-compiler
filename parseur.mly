@@ -1,4 +1,4 @@
-%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL UNDEFINED LET
+%token NUMBER PLUS MINUS TIMES DIV GPAREN DPAREN BOOLEAN EQ GREQ GR LOEQ LO NOT EOCOMMAND VAR ASSIGN EOF IF ELSE ET OBLOCK FBLOCK DO WHILE FUNC COMMA RETURN CALL UNDEFINED LET DOT COLUMN NULL
 
 %right ASSIGN
 %left ET
@@ -48,14 +48,21 @@ expression:
 	| NOT expression %prec NOT {}
 	| BOOLEAN {}
 	| UNDEFINED {}
+	| NULL{}
 	| VAR ASSIGN expression {}
 	| VAR {}
 	| expression ASSIGN expression {}
 	| expression ET expression {}
 	| VAR GPAREN arguments DPAREN{}
+	| OBLOCK objet_content FBLOCK{}
+	| expression DOT VAR {}
 	;
 arguments: 
 	| {}
 	| expression {}
 	| expression COMMA arguments {}
 	;
+objet_content: 
+	|  {}
+	|VAR COLUMN expression {}
+	| VAR COLUMN expression COMMA objet_content {};
