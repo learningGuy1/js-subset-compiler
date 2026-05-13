@@ -9,3 +9,9 @@ function f(){
 let y;
 y=3;
 y;
+
+while(y>0){
+	let z;
+	z=1;
+	y=y-z;
+}
