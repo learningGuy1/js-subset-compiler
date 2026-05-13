@@ -21,8 +21,8 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: p7.0***
-- Version du parseur concernant le sous-fragment 7.0 (let \_;)
+***Version actuelle: c7.0***
+- Version du projet concernant le sous-fragment 7.0 (let \_;)
 - Répartition du travail:
 	- Nino BERNARD: Intégralité du sous-fragment.
 - Un conflit shift/reduce est présent entre les variables et le mot-clé let. Il est résolu arbitrairement en modifiant l'ordre des règles de lexing de sorte à prioriser let.
