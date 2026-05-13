@@ -3,6 +3,7 @@ type programme_a =
 and commande_a =
 	Expr of expression_a
 	| Block of programme_a
+	| Let of string
 	| IfThenElse of expression_a * commande_a* commande_a
 	| While of expression_a * commande_a
 	| DoWhile of commande_a * expression_a
@@ -43,6 +44,7 @@ let rec print_programme form prog = match prog with
 and print_commande form com = match com with
 	| Expr e -> Format.fprintf form "Exp(%a)\n" print_expr e
 	| Block c -> Format.fprintf form "Block(%a)\n" print_programme c 
+	| Let x -> Format.fprintf form "Let[%s]\n" x
 	| IfThenElse (cond,den,els) -> Format.fprintf form "IfThenElse(%a, %a, %a)\n"
       print_expr cond
       print_commande den
@@ -110,11 +112,14 @@ and code_com com =
 	| Expr e -> code_expr (opti_expr e)
 	| Block b -> code b
 	| Semicol -> ""
+	| Let x -> "DclVar " ^ x ^ "\n"
 	| IfThenElse (cond, den, els) -> (code_expr cond ^ check_not_func ^ cast_bo ^
 										"ConJmp " ^ (string_of_int ((com_length den) + 1) ) ^ "\n" ^
 										code_com den ^ "Jump " ^ (string_of_int ( (com_length els) + 1) ) ^ "\n" ^code_com els )
-	| While (cond, com) ->  code_expr cond ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com ^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2)) ^ "\n"
-	| DoWhile (com, cond) -> code_com com ^ code_expr cond ^ check_not_func ^ cast_bo ^ "Not\nConJmp " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2)) ^ "\n"
+	| While (cond, com) ->  code_expr cond ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((com_length com) + 1)) ^ "\n" ^ code_com com 
+													^ "Jump " ^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 5 (*check fonction*) - 10 (*Cast en bool*))) ^ "\n"
+	| DoWhile (com, cond) -> code_com com ^ code_expr cond ^ check_not_func ^ cast_bo ^ "Not\nConJmp " 
+													^ (string_of_int (-(com_length com) -(expr_length cond) - 2 - 5 (*check fonction*) - 10 (*Cast en bool*))) ^ "\n"
 	| Function (f,param,fcode) -> "NewClot func_" ^ f ^ "\n" ^(func_param f param) ^"func_"^f^":\n" ^code_com fcode
   | Return a -> code_expr a ^ "Return\n"
 and func_param f args =
@@ -181,7 +186,8 @@ and code_expr expr =
 	| Assign (g,d) -> code_expr d ^ "SetVar " ^ g ^ "\n"
 	| Var x -> "GetVar " ^ x ^ "\n"
 	| Not f -> code_expr f ^ check_not_func ^ cast_bo ^ "Not\n"
-	| Et (g,d) -> code_expr g ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((expr_length d) + 5 (*check fonction*) + 10 (*Cast en bool*) + 1) ) ^ "\n" ^ code_expr d ^ check_not_func ^ cast_bo ^ "Jump 1\n" ^ "CsteBo false\n" 
+	| Et (g,d) -> code_expr g ^ check_not_func ^ cast_bo ^ "ConJmp " ^ (string_of_int ((expr_length d) + 5 (*check fonction*) + 10 (*Cast en bool*) + 1) ) ^ "\n" 
+								^ code_expr d ^ check_not_func ^ cast_bo ^ "Jump 1\n" ^ "CsteBo false\n" 
 	| FCall (f,args) ->"GetVar " ^ f ^ "\n" ^"StCall\n" ^code_call_args args ^"Call\n"
 and code_call_args args =
 	match args with
@@ -223,6 +229,7 @@ and com_length com = match com with
 	| Expr e -> expr_length (opti_expr e)
 	| Semicol -> 0
 	| Block (Prog l) -> code_length_list l
+	| Let x -> 1;
 	| IfThenElse (cond, den, els) -> expr_length cond + com_length den + com_length els + 2 + 5 (*check fonction*) + 10 (*Cast en bool*)
 	| While (cond, com) -> expr_length cond + com_length com + 2 + 5 (*check fonction*) + 10 (*Cast en bool*)
 	| DoWhile (com, cond) -> com_length com + expr_length cond + 2 + 5 (*check fonction*) + 10 (*Cast en bool*)

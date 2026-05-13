@@ -1,0 +1,17 @@
+function f(){
+	x=3-2;
+	let y;
+	y=x;
+	return y;
+}
+
+2;
+let y;
+y=3;
+y;
+
+while(y>0){
+	let z;
+	z=1;
+	y=y-z;
+}
