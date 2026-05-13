@@ -21,9 +21,11 @@ Le fichier en second argument contiendra le résultat de l'exécution.
 
 ## Changements
 
-***Version actuelle: p7.0***
-- Version du parseur concernant le sous-fragment 7.0 (let \_;)
+***Version actuelle: p8.0_8.1 (INCOMPLET)***
+- Version du parseur concernant les sous-fragments 8.0 (null) et 8.1 (objets)
+**NOTE: cette version est incomplète et n'est présente que pour attester de l'avancée du projet au moment du rendu**
 - Répartition du travail:
-	- Nino BERNARD: Intégralité du sous-fragment.
-- Un conflit shift/reduce est présent entre les variables et le mot-clé let. Il est résolu arbitrairement en modifiant l'ordre des règles de lexing de sorte à prioriser let.
-- Ajout du fichier test *test_let*
+	- Edwin KAMTO: Majorité des deux sous-fragments.
+	- Nino BERNARD: Tentative de gestion des conflits et ajouts
+- Présence de nombreux conflits shift/reduce non résolus
+- Ajout du fichier test *test_objets*

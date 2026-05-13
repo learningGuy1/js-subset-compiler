@@ -84,9 +84,10 @@ rule token = parse
 		{ UNDEFINED }
 	| "null"
 		{ NULL}
-	| ":" { COLUMN }
-	| "." { DOT }
-	
+	| ":"
+		{ COLUMN }
+	| "."
+		{ DOT }
 	| ['a'-'z']+(['A'-'Z']|['a'-'z']|['0'-'9']|'_')*
 		{ VAR }
 	| eof

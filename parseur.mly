@@ -49,10 +49,12 @@ expression:
 	| BOOLEAN {}
 	| UNDEFINED {}
 	| NULL{}
+	| expression DOT VAR ASSIGN expression {}
 	| VAR ASSIGN expression {}
 	| VAR {}
 	| expression ASSIGN expression {}
 	| expression ET expression {}
+	| expression DOT VAR GPAREN arguments DPAREN {}
 	| VAR GPAREN arguments DPAREN{}
 	| OBLOCK objet_content FBLOCK{}
 	| expression DOT VAR {}
@@ -63,6 +65,6 @@ arguments:
 	| expression COMMA arguments {}
 	;
 objet_content: 
-	|  {}
-	|VAR COLUMN expression {}
+	| {}
+	| VAR COLUMN expression {}
 	| VAR COLUMN expression COMMA objet_content {};
