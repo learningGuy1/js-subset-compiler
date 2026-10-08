@@ -84,7 +84,6 @@ Ces deux dernières corrections rendent chaque assembleur généré exécutable 
 | Membre | Contribution |
 |---|---|
 | Juimo kamto Claude EDWIN | Fragment 5 en entier (fonctions, déclarations, closures), `if/else`, boucles, expressions booléennes, commentaires sur une ligne et multilignes |
-
 | Nino BERNARD | Sous-fragment 7.1 (hoisting et interdiction de `let` dupliqués), intégralité |
 
 ## Contexte et crédits
