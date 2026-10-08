@@ -91,6 +91,3 @@ Ces deux dernières corrections rendent chaque assembleur généré exécutable 
 
 Projet de licence. Le sujet, la machine virtuelle (mini-JSM) et la machine d'exécution JavaScript sont fournis par l'équipe enseignante et ne font pas partie de ce dépôt.
 
-## Licence
-
-À définir avec l'équipe et l'enseignant avant publication.
